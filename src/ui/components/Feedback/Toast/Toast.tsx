@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import styled, { css } from 'styled-components';
-import { BaseComponentProps } from '@/ui/types';
 import { Icon } from '@/ui/components/Base/Icon';
 import { IconButton } from '@/ui/components/Base/IconButton';
+import { BaseComponentProps } from '@/ui/types';
+import { useEffect } from 'react';
+import styled, { css } from 'styled-components';
 
 export type ToastVariant = 'success' | 'danger' | 'info' | 'warning';
 

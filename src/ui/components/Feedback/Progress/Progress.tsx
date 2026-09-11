@@ -18,9 +18,17 @@ const Track = styled.div<{ $height: string }>`
 const Bar = styled.div<{ $value: number; $variant: string }>`
   height: 100%;
   width: ${({ $value }) => `${Math.min(Math.max($value, 0), 100)}%`};
-  background-color: ${({ $variant, theme }) =>
-    theme.colors[$variant as keyof typeof theme.colors]?.base ||
-    theme.colors.primary.base};
+  background-color: ${({ $variant, theme }) => {
+    const colorOption = theme.colors[$variant as keyof typeof theme.colors];
+    if (
+      colorOption &&
+      typeof colorOption === 'object' &&
+      'base' in colorOption
+    ) {
+      return (colorOption as { base: string }).base;
+    }
+    return theme.colors.primary.base;
+  }};
   border-radius: inherit;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 `;

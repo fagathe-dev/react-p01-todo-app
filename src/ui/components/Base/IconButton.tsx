@@ -20,12 +20,12 @@ const iconSizes = {
   lg: 22,
 };
 
-const StyledIconButton = styled(Button)<IconButtonProps>`
+const StyledIconButton = styled(Button)<{ $round?: boolean }>`
   padding: 0;
-  width: ${({ size = 'base' }) => dimensions[size]};
-  height: ${({ size = 'base' }) => dimensions[size]};
-  border-radius: ${({ round, theme }) =>
-    round ? theme.radii.full : theme.radii.base};
+  width: ${({ size = 'base' }) => dimensions[size as keyof typeof dimensions]};
+  height: ${({ size = 'base' }) => dimensions[size as keyof typeof dimensions]};
+  border-radius: ${({ $round, theme }) =>
+    $round ? theme.radii.full : theme.radii.base};
   flex-shrink: 0;
 `;
 
@@ -38,7 +38,7 @@ export const IconButton = ({
 }: IconButtonProps) => {
   return (
     <StyledIconButton size={size} variant={variant} $round={round} {...rest}>
-      <Icon name={name} size={iconSizes[size]} />
+      <Icon name={name} size={iconSizes[size as keyof typeof iconSizes]} />
     </StyledIconButton>
   );
 };

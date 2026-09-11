@@ -9,7 +9,6 @@ import styled from 'styled-components';
 import { TaskCard } from './TaskCard';
 import { TaskEditModal } from './TaskEditModal';
 import { TaskQuickCreate } from './TaskQuickCreate';
-import { Link } from '@/ui/components/Base';
 
 const PageWrapper = styled.div`
   display: flex;

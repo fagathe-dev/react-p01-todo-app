@@ -8,7 +8,7 @@ import {
   radii,
   spacing,
   typography,
-} from './tokens';
+} from '@/ui/theme/tokens';
 
 export interface AppTheme {
   name: 'light' | 'dark';

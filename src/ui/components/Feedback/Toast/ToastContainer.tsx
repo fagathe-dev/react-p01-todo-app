@@ -1,9 +1,12 @@
-import React from 'react';
+import { BaseComponentProps } from '@/ui/types';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import { BaseComponentProps } from '@/ui/types';
 
-export type ToastPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+export type ToastPosition =
+  | 'top-right'
+  | 'top-left'
+  | 'bottom-right'
+  | 'bottom-left';
 
 export interface ToastContainerProps extends BaseComponentProps {
   position?: ToastPosition;

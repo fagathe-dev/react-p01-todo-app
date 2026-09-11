@@ -1,9 +1,9 @@
-import React, { forwardRef, useId } from 'react';
+import { forwardRef, useId } from 'react';
 import styled from 'styled-components';
 import { FieldBaseProps } from '../form.types';
+import { HelperText } from '../HelperText';
 import { Input, InputProps } from '../Input';
 import { Label } from '../Label';
-import { HelperText } from '../HelperText';
 
 const FieldWrapper = styled.div`
   display: flex;
@@ -11,7 +11,8 @@ const FieldWrapper = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing[3]};
 `;
 
-export interface TextFieldProps extends Omit<InputProps, 'id'>, FieldBaseProps {}
+export interface TextFieldProps
+  extends Omit<InputProps, 'id'>, FieldBaseProps {}
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   ({ label, error, hint, required, id: customId, ...inputProps }, ref) => {
@@ -24,7 +25,13 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         <Label htmlFor={id} required={required}>
           {label}
         </Label>
-        <Input ref={ref} id={id} required={required} validationState={validationState} {...inputProps} />
+        <Input
+          ref={ref}
+          id={id}
+          required={required}
+          validationState={validationState}
+          {...inputProps}
+        />
         {error && <HelperText state="invalid">{error}</HelperText>}
         {!error && hint && <HelperText>{hint}</HelperText>}
       </FieldWrapper>
