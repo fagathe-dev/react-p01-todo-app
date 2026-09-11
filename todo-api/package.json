@@ -3,6 +3,7 @@
   "name": "todo-api",
   "version": "1.0.0",
   "type": "module",
+  "output": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
