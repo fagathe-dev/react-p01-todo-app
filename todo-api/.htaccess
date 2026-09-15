@@ -5,6 +5,8 @@
     Header always set Access-Control-Allow-Credentials "true"
 </IfModule>
 
+Options -MultiViews
+
 RewriteEngine On
 RewriteCond %{REQUEST_METHOD} OPTIONS
 RewriteRule ^(.*)$ $1 [R=204,L]
