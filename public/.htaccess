@@ -2,11 +2,20 @@
   RewriteEngine On
   RewriteBase /
 
-  # Forcer la redirection HTTPS
+  # 1. Forcer la redirection HTTPS (compatible reverse proxy SSL o2switch)
   RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-  # Routage SPA React : redirige vers index.html si la ressource n'est ni un fichier ni un dossier
+  # 2. Transmission du header Authorization à PHP-FPM (indispensable pour LexikJWT)
+  RewriteCond %{HTTP:Authorization} ^(.*)
+  RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+
+  # 3. Délégation des requêtes /api vers le point d'entrée Symfony
+  RewriteCond %{REQUEST_URI} ^/api(/.*)?$
+  RewriteRule ^api/?(.*)$ /sf-todo-api/public/index.php [QSA,L]
+
+  # 4. Routage SPA React : renvoi sur index.html pour les pages de l'application
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
@@ -19,12 +28,12 @@
   Header set X-Content-Type-Options "nosniff"
   Header set X-Frame-Options "SAMEORIGIN"
 
-  # Mise en cache longue des assets buildés par Vite (hashés)
+  # Mise en cache longue des assets buildés par Vite (fichiers hashés)
   <FilesMatch "\.(js|css|webp|png|jpg|jpeg|gif|svg|woff|woff2)$">
     Header set Cache-Control "max-age=31536000, public, immutable"
   </FilesMatch>
 
-  # Pas de cache sur index.html pour garantir l'accès direct aux mises à jour
+  # Pas de cache sur index.html pour garantir le chargement immédiat des nouveaux builds
   <FilesMatch "index\.html">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
   </FilesMatch>
