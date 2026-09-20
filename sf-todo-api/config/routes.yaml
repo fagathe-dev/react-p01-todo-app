@@ -15,5 +15,5 @@ controllers:
   prefix: /api
 
 api_auth_login:
-  path: /auth/login
+  path: /api/auth/login
   methods: [POST]

@@ -13,13 +13,21 @@ import { z } from 'zod';
 
 const registerSchema = z
   .object({
+    email: z
+      .email("Format d'e-mail invalide")
+      .min(1, "L'adresse e-mail est obligatoire"),
     username: z
       .string()
-      .min(3, "L'identifiant doit contenir au moins 3 caractères")
-      .max(50, "L'identifiant est trop long"),
+      .trim()
+      .min(3, "Le nom d'utilisateur doit contenir au moins 3 caractères")
+      .max(90, "Le nom d'utilisateur doit contenir au maximum 90 caractères"),
     password: z
       .string()
-      .min(6, 'Le mot de passe doit faire au moins 6 caractères'),
+      .min(8, 'Le mot de passe doit comporter au moins 8 caractères')
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+        'Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre'
+      ),
     confirmPassword: z.string().min(1, 'Veuillez confirmer votre mot de passe'),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -41,6 +49,7 @@ export const RegisterPage = () => {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
+      email: '',
       username: '',
       password: '',
       confirmPassword: '',
@@ -50,22 +59,20 @@ export const RegisterPage = () => {
   const onSubmit = async (data: RegisterFormData) => {
     setApiError(null);
     try {
-      // 1. Enregistrement en base de données
+      // 1. Inscription sur l'API Symfony
       await fetchRegister({
+        email: data.email,
         username: data.username,
         password: data.password,
       });
 
-      // 2. Connexion automatique immédiate
+      // 2. Connexion immédiate avec l'adresse e-mail
       const loginResponse = await fetchLogin({
-        username: data.username,
+        username: data.email,
         password: data.password,
       });
 
-      // 3. Stockage du token dans le localStorage et redirection
-      localStorage.setItem('todo_auth_token', loginResponse.token);
       setAuth(loginResponse.token, loginResponse.user);
-
       navigate('/');
     } catch (err) {
       setApiError(
@@ -88,7 +95,15 @@ export const RegisterPage = () => {
           )}
 
           <TextField
-            label="Identifiant"
+            label="Adresse e-mail"
+            type="email"
+            placeholder="Ex : john@example.com"
+            error={errors.email?.message}
+            {...register('email')}
+          />
+
+          <TextField
+            label="Nom d'utilisateur"
             type="text"
             placeholder="Ex : john_doe"
             error={errors.username?.message}
@@ -98,7 +113,7 @@ export const RegisterPage = () => {
           <TextField
             label="Mot de passe"
             type="password"
-            placeholder="Minimum 6 caractères"
+            placeholder="Min. 8 car., 1 majuscule, 1 chiffre"
             error={errors.password?.message}
             {...register('password')}
           />

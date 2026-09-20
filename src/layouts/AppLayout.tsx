@@ -31,7 +31,6 @@ const MainContent = styled(Container).attrs({ as: 'main' })`
 
 export const AppLayout = () => {
   const { theme, isDark, toggleTheme } = useTheme();
-  const navigate = useNavigate();
 
   return (
     <LayoutRoot>
@@ -57,12 +56,13 @@ export const AppLayout = () => {
             />
           </NavbarItem>
           <NavbarItem>
-            <IconButton
-              name="logout"
-              aria-label="Se déconnecter"
-              onClick={() => navigate('/login')}
-              size="base"
-            />
+            <Link href="/logout">
+              <IconButton
+                name="logout"
+                aria-label="Se déconnecter"
+                size="base"
+              />
+            </Link>
           </NavbarItem>
         </NavbarNav>
       </Navbar>

@@ -1,4 +1,4 @@
-import { fetchLogin } from '@/services/auth.api';
+import { fetchLogin, fetchProfile } from '@/services/auth.api';
 import { useAuthStore } from '@/stores/auth.store';
 import { Button } from '@/ui/components/Base/Button';
 import { Card } from '@/ui/components/Content/Card';
@@ -6,13 +6,27 @@ import { Alert } from '@/ui/components/Feedback/Alert';
 import { TextField } from '@/ui/components/Forms/Fields/TextField';
 import { Text } from '@/ui/components/Typo/Text';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 const loginSchema = z.object({
-  username: z.string().min(1, "L'identifiant est obligatoire"),
+  username: z
+    .string()
+    .trim()
+    .min(1, "L'identifiant est obligatoire")
+    .refine(
+      (val) => {
+        const isEmail = z.email().safeParse(val).success;
+        const isUsername = val.length >= 3;
+        return isEmail || isUsername;
+      },
+      {
+        message:
+          "Veuillez renseigner une adresse e-mail valide ou un nom d'utilisateur (au moins 3 caractères)",
+      }
+    ),
   password: z.string().min(1, 'Le mot de passe est obligatoire'),
 });
 
@@ -20,8 +34,15 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export const LoginPage = () => {
   const [apiError, setApiError] = useState<string | null>(null);
-  const setAuth = useAuthStore((state) => state.setAuth);
+  const { setAuth, token, user } = useAuthStore();
   const navigate = useNavigate();
+
+  // Redirection automatique si une session valide est déjà active
+  useEffect(() => {
+    if (token && user) {
+      navigate('/', { replace: true });
+    }
+  }, [token, user, navigate]);
 
   const {
     register,
@@ -38,12 +59,14 @@ export const LoginPage = () => {
   const onSubmit = async (data: LoginFormData) => {
     setApiError(null);
     try {
-      const response = await fetchLogin(data);
+      // 1. Récupération du JWT Lexik
+      const { token } = await fetchLogin(data);
 
-      // Stockage explicite du token dans le localStorage et mise à jour du store
-      localStorage.setItem('todo_auth_token', response.token);
-      setAuth(response.token, response.user);
+      // 2. Récupération du profil utilisateur associé
+      const userProfile = await fetchProfile(token);
 
+      // 3. Hydratation complète du store et redirection
+      setAuth(token, userProfile);
       navigate('/');
     } catch (err) {
       setApiError(err instanceof Error ? err.message : 'Erreur de connexion');
@@ -64,9 +87,9 @@ export const LoginPage = () => {
           )}
 
           <TextField
-            label="Identifiant"
+            label="E-mail ou nom d'utilisateur"
             type="text"
-            placeholder="Ex : john_doe"
+            placeholder="Ex : john@example.com ou johndoe"
             error={errors.username?.message}
             {...register('username')}
           />

@@ -1,6 +1,7 @@
 import { AppLayout } from '@/layouts/AppLayout';
 import { AuthLayout } from '@/layouts/AuthLayout';
 import { LoginPage } from '@/pages/auth/LoginPage';
+import { LogoutPage } from '@/pages/auth/LogoutPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
 import { TagsPage } from '@/pages/tags/TagsPage';
 import { TasksPage } from '@/pages/tasks/TasksPage';
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
           {
             path: '/tags',
             element: <TagsPage />,
+          },
+          {
+            path: '/logout',
+            element: <LogoutPage />,
           },
         ],
       },

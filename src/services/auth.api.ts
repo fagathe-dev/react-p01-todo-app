@@ -1,4 +1,4 @@
-import { User } from '@/types/auth.types';
+import { RegisterResponse, User } from '@/types/auth.types';
 import { fetchAPI } from './fetchAPI';
 
 export interface AuthResponse {
@@ -6,25 +6,25 @@ export interface AuthResponse {
   user: User;
 }
 
-export interface RegisterResponse {
-  id: string;
-  username: string;
-  role: string;
-}
-
-export interface AuthCredentials {
+export interface RegisterPayload {
+  email: string;
   username: string;
   password: string;
 }
 
-const AUTH_BASE_URL:string = '/auth';
+export interface LoginPayload {
+  username: string; // Accepte soit l'email, soit le pseudo
+  password: string;
+}
+
+const AUTH_BASE_URL = '/auth';
 
 export const fetchRegister = async (
-  credentials: AuthCredentials
+  payload: RegisterPayload
 ): Promise<RegisterResponse> => {
   const res = await fetchAPI<RegisterResponse>(`${AUTH_BASE_URL}/register`, {
     method: 'POST',
-    body: credentials,
+    body: payload,
   });
 
   if (!res.ok) {
@@ -38,7 +38,7 @@ export const fetchRegister = async (
 };
 
 export const fetchLogin = async (
-  credentials: AuthCredentials
+  credentials: LoginPayload
 ): Promise<AuthResponse> => {
   const res = await fetchAPI<AuthResponse>(`${AUTH_BASE_URL}/login`, {
     method: 'POST',
