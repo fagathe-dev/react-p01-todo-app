@@ -10,7 +10,7 @@ import {
   NavbarNav,
 } from '@/ui/components/Navigation/Navbar';
 import { Text } from '@/ui/components/Typo/Text';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 
 const LayoutRoot = styled.div`
