@@ -11,6 +11,7 @@
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
+  DirectoryIndex index.html
 </IfModule>
 
 # Sécurité et mise en cache des assets

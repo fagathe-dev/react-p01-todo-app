@@ -1,5 +1,5 @@
 import { TaskResponse, updateTask } from '@/services/task.api';
-import { TagColor, tagColors } from '@/types/app.types';
+import { TagColorEnum, tagColors } from '@/types/app.types';
 import { Icon } from '@/ui/components/Base/Icon';
 import { Text } from '@/ui/components/Typo/Text';
 import React, { useEffect, useRef, useState } from 'react';
@@ -112,7 +112,7 @@ const ActionIconButton = styled.button`
 `;
 
 const TagPill = styled.span<{
-  $color?: TagColor | null;
+  $color?: TagColorEnum | null;
 }>`
   font-size: ${({ theme }) => theme.typography.sizes.xs};
   font-weight: ${({ theme }) => theme.typography.weights.medium};
@@ -121,8 +121,8 @@ const TagPill = styled.span<{
   border: 1px solid;
   border-color: ${({ $color, theme }) =>
     $color && tagColors[$color]
-  ? tagColors[$color]
-  : theme.colors.background.surfaceActive}40;
+      ? tagColors[$color]
+      : theme.colors.background.surfaceActive}40;
   background-color: ${({ $color, theme }) =>
     $color && tagColors[$color]
       ? tagColors[$color]
@@ -139,7 +139,7 @@ export interface TaskCardProps {
 }
 
 export const TaskCard = ({ task, onTaskUpdated, onEdit }: TaskCardProps) => {
-  const isDone = Boolean(task.is_done);
+  const isDone = Boolean(task.isDone);
   const [isEditing, setIsEditing] = useState(false);
   const [nameDraft, setNameDraft] = useState(task.name);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -157,12 +157,12 @@ export const TaskCard = ({ task, onTaskUpdated, onEdit }: TaskCardProps) => {
 
   const handleToggleDone = async () => {
     const nextStatus = !isDone;
-    onTaskUpdated({ ...task, is_done: nextStatus });
+    onTaskUpdated({ ...task, isDone: nextStatus });
 
     try {
-      await updateTask(task.id, { is_done: nextStatus });
+      await updateTask(task.id, { isDone: nextStatus });
     } catch {
-      onTaskUpdated({ ...task, is_done: isDone });
+      onTaskUpdated({ ...task, isDone: isDone });
     }
   };
 
@@ -242,11 +242,7 @@ export const TaskCard = ({ task, onTaskUpdated, onEdit }: TaskCardProps) => {
 
       {/* Zone d'actions à droite : Tag + Bouton pour ouvrir la modale */}
       <ActionsWrapper>
-        {task.tag_name && (
-          <TagPill $color={task.tag_color}>
-            {task.tag_name}
-          </TagPill>
-        )}
+        {task.tag && <TagPill $color={task.tag.color}>{task.tag.name}</TagPill>}
 
         {onEdit && (
           <ActionIconButton

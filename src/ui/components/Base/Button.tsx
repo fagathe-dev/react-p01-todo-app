@@ -36,9 +36,13 @@ const sizeStyles = {
   `,
 };
 
-export const Button = styled.button.attrs<ButtonProps>((props) => ({
-  type: props.type || 'button',
-}))<ButtonProps>`
+export const Button = styled.button
+  .withConfig({
+    shouldForwardProp: (prop) => prop !== 'loading',
+  })
+  .attrs<ButtonProps>((props) => ({
+    type: props.type || 'button',
+  }))<ButtonProps>`
   display: inline-flex;
   align-items: center;
   justify-content: center;

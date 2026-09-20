@@ -1,4 +1,5 @@
 import { createTask, TaskResponse } from '@/services/task.api';
+import { DueDateEnum } from '@/types/app.types';
 import { Icon } from '@/ui/components/Base/Icon';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -41,7 +42,7 @@ const AddButton = styled.button<{ $visible: boolean }>`
   display: ${({ $visible }) => ($visible ? 'inline-flex' : 'none')};
   align-items: center;
   justify-content: center;
-  padding: ${({ theme }) => `${theme.spacing[1]} ${theme.spacing[2.5]}`};
+  padding: ${({ theme }) => `${theme.spacing[1]}${theme.spacing[2.5]}`};
   font-family: inherit;
   font-size: ${({ theme }) => theme.typography.sizes.xs};
   font-weight: ${({ theme }) => theme.typography.weights.medium};
@@ -64,12 +65,12 @@ const AddButton = styled.button<{ $visible: boolean }>`
 
 export interface TaskQuickCreateProps {
   onTaskCreated: (task: TaskResponse) => void;
-  defaultDueDate?: 'today' | 'tomorrow' | 'this_week' | 'later';
+  defaultDueDate?: DueDateEnum | null;
 }
 
 export const TaskQuickCreate = ({
   onTaskCreated,
-  defaultDueDate,
+  defaultDueDate = null,
 }: TaskQuickCreateProps) => {
   const [name, setName] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -84,7 +85,7 @@ export const TaskQuickCreate = ({
       setIsSubmitting(true);
       const created = await createTask({
         name: trimmedName,
-        due_date: defaultDueDate,
+        dueDate: defaultDueDate,
       });
 
       onTaskCreated(created);

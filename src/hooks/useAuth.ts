@@ -1,11 +1,11 @@
 import { useAuthStore } from '@/stores/auth.store';
-import { User } from '@/types/auth.types';
+import { RoleEnum, User } from '@/types/auth.types';
 import { isTokenValid } from '@/utils/jwt';
 
 export interface UseAuthReturn {
   isAuth: boolean;
   user: User | null;
-  role: 'Admin' | 'User' | null;
+  role?: Array<RoleEnum>;
   isAdmin: boolean;
   isLoading: boolean;
   token: string | null;
@@ -17,8 +17,8 @@ export const useAuth = (): UseAuthReturn => {
 
   const isTokenActive = isTokenValid(token);
   const isAuth = Boolean(token && isTokenActive && user);
-  const role = user?.role ?? null;
-  const isAdmin = role === 'Admin';
+  const role = user?.roles;
+  const isAdmin = role !== undefined ? role.includes('ROLE_ADMIN') : false;
 
   return {
     isAuth,

@@ -1,4 +1,4 @@
-import { TagColor, tagColors, TaskTag } from '@/types/app.types';
+import { TagColorEnum, tagColors, TaskTag } from '@/types/app.types';
 import { Icon } from '@/ui/components/Base/Icon';
 import { Text } from '@/ui/components/Typo/Text';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -213,7 +213,7 @@ export const TagSelectDropdown = ({
     setSearch('');
   };
 
-  const getColorHex = (c?: TagColor | null) =>
+  const getColorHex = (c?: TagColorEnum | null) =>
     c && tagColors[c] ? tagColors[c] : tagColors.blue;
 
   return (

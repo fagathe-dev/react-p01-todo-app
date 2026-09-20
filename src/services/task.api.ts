@@ -1,108 +1,46 @@
-import { Task, TaskTag } from '@/types/app.types';
-import { fetchAPI } from './fetchAPI';
+import { CreateTaskPayload, Task, UpdateTaskPayload } from '@/types/app.types';
 
-export interface CreateTaskDto {
-  name: string;
-  description?: string;
-  due_date?: Task['due_date'];
-  tag_id?: string | null;
-}
+// Alias pour conserver la compatibilité avec les imports existants
+export type TaskResponse = Task;
 
-export interface UpdateTaskDto {
-  name?: string;
-  is_done?: boolean;
-  description?: string | null;
-  due_date?: Task['due_date'] | null;
-  tag_id?: string | null;
-}
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-export interface TaskResponse extends Omit<Task, 'tag'> {
-  is_done?: boolean | number;
-  description?: string | null;
-  due_date?: Task['due_date'] | null;
-  tag_id?: string | null;
-  tag_name?: string | null;
-  tag_color?: TaskTag['color'] | null;
-}
-
-export const fetchTasks = async (): Promise<TaskResponse[]> => {
-  const res = await fetchAPI<TaskResponse[]>('/tasks');
-
-  if (!res.ok) {
-    throw new Error('Erreur lors de la récupération des tâches');
-  }
-
-  return res.data ?? [];
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('todo_auth_token');
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
 };
 
-export const fetchTaskById = async (id: string): Promise<TaskResponse> => {
-  const res = await fetchAPI<TaskResponse>(`/tasks/${id}`);
-
-  if (!res.ok) {
-    throw new Error('Tâche introuvable');
-  }
-
-  return res.data;
-};
-
-export const fetchTasksByTag = async (
-  tagId: string
-): Promise<TaskResponse[]> => {
-  const res = await fetchAPI<TaskResponse[]>(`/tags/${tagId}/tasks`);
-
-  if (!res.ok) {
-    throw new Error(
-      'Erreur lors de la récupération des tâches associées au tag'
-    );
-  }
-
-  return res.data ?? [];
-};
-
-export const createTask = async (dto: CreateTaskDto): Promise<TaskResponse> => {
-  const res = await fetchAPI<TaskResponse>('/tasks', {
-    method: 'POST',
-    body: dto,
+export const fetchTasks = async (): Promise<Task[]> => {
+  const response = await fetch(`${API_URL}/todos`, {
+    headers: getAuthHeaders(),
   });
+  if (!response.ok) throw new Error('Erreur lors du chargement des tâches');
+  return response.json();
+};
 
-  if (!res.ok) {
-    throw new Error(
-      (res.data as { message?: string })?.message ||
-        'Erreur lors de la création de la tâche'
-    );
-  }
-
-  return res.data;
+export const createTask = async (payload: CreateTaskPayload): Promise<Task> => {
+  const response = await fetch(`${API_URL}/todos`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) throw new Error('Erreur lors de la création de la tâche');
+  return response.json();
 };
 
 export const updateTask = async (
   id: string,
-  dto: UpdateTaskDto
-): Promise<{ success: boolean }> => {
-  const res = await fetchAPI<{ success: boolean }>(`/tasks/${id}`, {
+  payload: UpdateTaskPayload
+): Promise<Task> => {
+  const response = await fetch(`${API_URL}/todos/${id}`, {
     method: 'PUT',
-    body: dto,
+    headers: getAuthHeaders(),
+    body: JSON.stringify(payload),
   });
-
-  if (!res.ok) {
-    throw new Error(
-      (res.data as { message?: string })?.message ||
-        'Erreur lors de la mise à jour'
-    );
-  }
-
-  return res.data;
-};
-
-export const deleteTask = async (id: string): Promise<void> => {
-  const res = await fetchAPI(`/tasks/${id}`, {
-    method: 'DELETE',
-  });
-
-  if (!res.ok) {
-    throw new Error(
-      (res.data as { message?: string })?.message ||
-        'Erreur lors de la suppression'
-    );
-  }
+  if (!response.ok)
+    throw new Error('Erreur lors de la mise à jour de la tâche');
+  return response.json();
 };

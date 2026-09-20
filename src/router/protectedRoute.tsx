@@ -1,20 +1,14 @@
 import { useAuth } from '@/hooks/useAuth';
-import { useAuthStore } from '@/stores/auth.store';
+import { RoleEnum } from '@/types/auth.types';
 import { Loading } from '@/ui/components/Feedback/Loading';
-import { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 export interface ProtectedRouteProps {
-  requiredRole?: 'Admin' | 'User';
+  requiredRole?: RoleEnum;
 }
 
 const ProtectedRoute = ({ requiredRole }: ProtectedRouteProps) => {
   const { isAuth, isLoading, role } = useAuth();
-  const checkSession = useAuthStore((state) => state.checkSession);
-
-  useEffect(() => {
-    checkSession();
-  }, [checkSession]);
 
   if (isLoading) {
     return (
@@ -28,7 +22,7 @@ const ProtectedRoute = ({ requiredRole }: ProtectedRouteProps) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (requiredRole && role !== requiredRole) {
+  if (requiredRole && !role?.includes(requiredRole)) {
     return <Navigate to="/" replace />;
   }
 

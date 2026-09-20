@@ -162,17 +162,17 @@ export const TasksPage = () => {
     };
 
     tasks.forEach((task) => {
-      if (Boolean(task.is_done)) {
+      if (Boolean(task.isDone)) {
         map.done.push(task);
-      } else if (!task.due_date) {
+      } else if (!task.dueDate) {
         map.none.push(task);
       } else if (
-        task.due_date === 'today' ||
-        task.due_date === 'tomorrow' ||
-        task.due_date === 'this_week' ||
-        task.due_date === 'later'
+        task.dueDate === 'today' ||
+        task.dueDate === 'tomorrow' ||
+        task.dueDate === 'this_week' ||
+        task.dueDate === 'later'
       ) {
-        map[task.due_date].push(task);
+        map[task.dueDate].push(task);
       } else {
         map.later.push(task);
       }
@@ -275,7 +275,10 @@ export const TasksPage = () => {
       )}
 
       <BottomBar>
-        <TaskQuickCreate onTaskCreated={handleTaskCreated} />
+        <TaskQuickCreate
+          onTaskCreated={handleTaskCreated}
+          defaultDueDate={null}
+        />
       </BottomBar>
     </PageWrapper>
   );

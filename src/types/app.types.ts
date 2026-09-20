@@ -1,5 +1,3 @@
-import { User } from './auth.types';
-
 export const tagColors = {
   red: '#e7000b',
   orange: '#f54900',
@@ -16,26 +14,54 @@ export const tagColors = {
   stone: '#57534d',
 } as const;
 
-export type TagColor = keyof typeof tagColors;
+export type TagColorEnum = keyof typeof tagColors;
 
+export type DueDateEnum = 'today' | 'tomorrow' | 'this_week' | 'later';
+
+/**
+ * Tag tel que renvoyé par l'API
+ */
 export interface TaskTag {
   id: string;
   name: string;
-  color?: TagColor | null;
-  description?: string | null;
-  created_at?: Date | string;
-  updated_at?: Date | string;
-  user?: User;
+  color: TagColorEnum | null;
+  description?: string | null; // Présent dans tag.read
+  createdAt?: string; // Présent dans tag.read
+  updatedAt?: string | null; // Présent dans tag.read
 }
 
+/**
+ * Tâche telle que renvoyée par l'API
+ */
 export interface Task {
   id: string;
-  is_done?: boolean | number;
+  name: string;
+  isDone: boolean;
+  dueDate: DueDateEnum | null;
+  description?: string | null; // Présent dans todo.read
+  createdAt?: string; // Présent dans todo.read
+  updatedAt?: string | null; // Présent dans todo.read
+  tag: TaskTag | null;
+}
+
+/**
+ * Payloads envoyés à l'API (POST / PUT)
+ */
+export interface CreateTaskPayload {
   name: string;
   description?: string | null;
-  due_date?: 'today' | 'tomorrow' | 'this_week' | 'later' | null;
-  created_at?: Date | string;
-  updated_at?: Date | string;
-  user?: User;
-  tag?: TaskTag;
+  dueDate?: DueDateEnum | null;
+  tag?: string | null; // UUID du tag sélectionné
 }
+
+export type UpdateTaskPayload = Partial<CreateTaskPayload> & {
+  isDone?: boolean;
+};
+
+export interface CreateTagPayload {
+  name: string;
+  color: TagColorEnum;
+  description?: string | null;
+}
+
+export type UpdateTagPayload = Partial<CreateTagPayload>;

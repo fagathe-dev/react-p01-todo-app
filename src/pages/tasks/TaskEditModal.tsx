@@ -1,6 +1,6 @@
 import { fetchTags } from '@/services/tag.api';
 import { TaskResponse, updateTask } from '@/services/task.api';
-import { TaskTag } from '@/types/app.types';
+import { DueDateEnum, TaskTag } from '@/types/app.types';
 import { Button } from '@/ui/components/Base/Button';
 import { Icon } from '@/ui/components/Base/Icon';
 import { TextField } from '@/ui/components/Forms/Fields/TextField';
@@ -135,10 +135,8 @@ const ModalFooter = styled.div`
   background-color: ${({ theme }) => theme.colors.background.body};
 `;
 
-type DueDateValue = 'today' | 'tomorrow' | 'this_week' | 'later';
-
 const DUE_DATE_OPTIONS: Array<{
-  key: DueDateValue;
+  key: DueDateEnum;
   label: string;
   icon: string;
 }> = [
@@ -151,11 +149,11 @@ const DUE_DATE_OPTIONS: Array<{
 const editTaskSchema = z.object({
   name: z.string().min(1, 'Le nom est obligatoire'),
   description: z.string().optional(),
-  due_date: z
+  dueDate: z
     .enum(['today', 'tomorrow', 'this_week', 'later'])
     .optional()
     .nullable(),
-  tag_id: z.string().optional(),
+  tag: z.string().optional(),
 });
 
 type EditTaskFormData = z.infer<typeof editTaskSchema>;
@@ -187,13 +185,13 @@ export const TaskEditModal = ({
     defaultValues: {
       name: task.name,
       description: task.description || '',
-      due_date: (task.due_date as DueDateValue) || null,
-      tag_id: task.tag_id || '',
+      dueDate: task.dueDate,
+      tag: task.tag?.id || '', // Extraction de l'identifiant du tag
     },
   });
 
-  const selectedDueDate = watch('due_date');
-  const selectedTagId = watch('tag_id');
+  const selectedDueDate = watch('dueDate');
+  const selectedTagId = watch('tag');
 
   useEffect(() => {
     if (isOpen) {
@@ -204,40 +202,38 @@ export const TaskEditModal = ({
       reset({
         name: task.name,
         description: task.description || '',
-        due_date: (task.due_date as DueDateValue) || null,
-        tag_id: task.tag_id || '',
+        dueDate: task.dueDate,
+        tag: task.tag?.id || '',
       });
     }
   }, [isOpen, task, reset]);
 
   if (!isOpen) return null;
 
-  const handleToggleDueDate = (key: DueDateValue) => {
+  const handleToggleDueDate = (key: DueDateEnum) => {
     const nextValue = selectedDueDate === key ? null : key;
-    setValue('due_date', nextValue, { shouldDirty: true });
+    setValue('dueDate', nextValue, { shouldDirty: true });
   };
 
   const onSubmit = async (data: EditTaskFormData) => {
-    const formattedDueDate = data.due_date || undefined;
-    const formattedTagId = data.tag_id ? data.tag_id : undefined;
-    const selectedTag = tags.find((t) => t.id === formattedTagId);
+    const formattedDueDate = data.dueDate ?? null;
+    const formattedTagId = data.tag ? data.tag : null;
+    const selectedTag = tags.find((t) => t.id === formattedTagId) ?? null;
 
     try {
       await updateTask(task.id, {
         name: data.name.trim(),
-        description: data.description?.trim() || undefined,
-        due_date: formattedDueDate,
-        tag_id: formattedTagId,
+        description: data.description?.trim() || null,
+        dueDate: formattedDueDate,
+        tag: formattedTagId,
       });
 
       onTaskUpdated({
         ...task,
         name: data.name.trim(),
-        description: data.description?.trim() || undefined,
-        due_date: formattedDueDate,
-        tag_id: formattedTagId,
-        tag_name: selectedTag ? selectedTag.name : undefined,
-        tag_color: selectedTag ? selectedTag.color : undefined,
+        description: data.description?.trim() || null,
+        dueDate: formattedDueDate,
+        tag: selectedTag, // Assignation de l'objet TaskTag | null
       });
 
       onClose();
@@ -273,7 +269,6 @@ export const TaskEditModal = ({
             />
           </FieldWrapper>
 
-          {/* Sélection par Chips */}
           <FieldWrapper>
             <FieldLabel size="xs">Échéance</FieldLabel>
             <ChipsGroup role="group" aria-label="Sélectionner une échéance">
@@ -302,7 +297,7 @@ export const TaskEditModal = ({
                 tags={tags}
                 value={selectedTagId}
                 onChange={(newTagId) =>
-                  setValue('tag_id', newTagId || '', { shouldDirty: true })
+                  setValue('tag', newTagId || '', { shouldDirty: true })
                 }
               />
             </FieldWrapper>

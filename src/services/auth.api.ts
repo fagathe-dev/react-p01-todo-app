@@ -17,10 +17,12 @@ export interface AuthCredentials {
   password: string;
 }
 
+const AUTH_BASE_URL:string = '/auth';
+
 export const fetchRegister = async (
   credentials: AuthCredentials
 ): Promise<RegisterResponse> => {
-  const res = await fetchAPI<RegisterResponse>('/register', {
+  const res = await fetchAPI<RegisterResponse>(`${AUTH_BASE_URL}/register`, {
     method: 'POST',
     body: credentials,
   });
@@ -38,7 +40,7 @@ export const fetchRegister = async (
 export const fetchLogin = async (
   credentials: AuthCredentials
 ): Promise<AuthResponse> => {
-  const res = await fetchAPI<AuthResponse>('/login', {
+  const res = await fetchAPI<AuthResponse>(`${AUTH_BASE_URL}/login`, {
     method: 'POST',
     body: credentials,
   });
@@ -53,7 +55,7 @@ export const fetchLogin = async (
 };
 
 export const fetchProfile = async (token?: string): Promise<User> => {
-  const res = await fetchAPI<User>('/auth/profile', {
+  const res = await fetchAPI<User>(`${AUTH_BASE_URL}/profile`, {
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   });
 

@@ -1,5 +1,5 @@
 import { createTag, deleteTag, fetchTags, updateTag } from '@/services/tag.api';
-import { TagColor, tagColors, TaskTag } from '@/types/app.types';
+import { TagColorEnum, tagColors, TaskTag } from '@/types/app.types';
 import { Button } from '@/ui/components/Base/Button';
 import { Icon } from '@/ui/components/Base/Icon';
 import { Loading } from '@/ui/components/Feedback/Loading';
@@ -23,7 +23,7 @@ const HeaderRow = styled.div`
   gap: ${({ theme }) => theme.spacing[3]};
 `;
 
-const TagBadge = styled.span<{ $color: TagColor }>`
+const TagBadge = styled.span<{ $color: TagColorEnum }>`
   display: inline-flex;
   align-items: center;
   padding: ${({ theme }) => `${theme.spacing[1]} ${theme.spacing[3]}`};
@@ -123,7 +123,7 @@ export const TagsPage = () => {
   // Formulaire d'édition / création
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [color, setColor] = useState<TagColor>('blue');
+  const [color, setColor] = useState<TagColorEnum>('blue');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const loadTags = async () => {
@@ -153,7 +153,7 @@ export const TagsPage = () => {
     setEditingTagId(tag.id);
     setName(tag.name);
     setDescription(tag.description || '');
-    setColor(tag.color as TagColor);
+    setColor(tag.color as TagColorEnum);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -250,7 +250,7 @@ export const TagsPage = () => {
               Couleur :
             </Text>
             <ColorPalette>
-              {(Object.keys(tagColors) as TagColor[]).map((c) => (
+              {(Object.keys(tagColors) as TagColorEnum[]).map((c) => (
                 <ColorSwatch
                   key={c}
                   type="button"
@@ -288,7 +288,9 @@ export const TagsPage = () => {
           {tags.map((tag) => (
             <TagRow key={tag.id}>
               <TagInfo>
-                <TagBadge $color={tag.color as TagColor}>{tag.name}</TagBadge>
+                <TagBadge $color={tag.color as TagColorEnum}>
+                  {tag.name}
+                </TagBadge>
                 {tag.description && (
                   <Text size="xs" color="muted">
                     {tag.description}
