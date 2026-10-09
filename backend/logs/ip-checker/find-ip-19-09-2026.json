@@ -1,0 +1,509 @@
+[
+    {
+        "id": "LOG_20260919114149_6aae58dd8123e",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 11:41:49"
+    },
+    {
+        "id": "LOG_20260919114149_6aae58ddd46a7",
+        "level": "debug",
+        "content": {
+            "message": "Réponse cURL reçue",
+            "service": "http:\/\/httpbin.org\/ip",
+            "http_code": 200,
+            "duration_ms": 339.35
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.curl.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 11:41:49"
+    },
+    {
+        "id": "LOG_20260919114149_6aae58ddd4d69",
+        "level": "info",
+        "content": {
+            "message": "IP récupérée avec succès via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 11:41:49"
+    },
+    {
+        "id": "LOG_20260919114330_6aae5942b3fb9",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 11:43:30"
+    },
+    {
+        "id": "LOG_20260919114332_6aae5944947c9",
+        "level": "debug",
+        "content": {
+            "message": "Réponse cURL reçue",
+            "service": "http:\/\/httpbin.org\/ip",
+            "http_code": 200,
+            "duration_ms": 1868.83
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.curl.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 11:43:32"
+    },
+    {
+        "id": "LOG_20260919114332_6aae594495781",
+        "level": "info",
+        "content": {
+            "message": "IP récupérée avec succès via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 11:43:32"
+    },
+    {
+        "id": "LOG_20260919142620_6aae7f6ce3b30",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:26:20"
+    },
+    {
+        "id": "LOG_20260919142622_6aae7f6e0af06",
+        "level": "debug",
+        "content": {
+            "message": "Réponse cURL reçue",
+            "service": "http:\/\/httpbin.org\/ip",
+            "http_code": 200,
+            "duration_ms": 1108.11
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.curl.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:26:22"
+    },
+    {
+        "id": "LOG_20260919142622_6aae7f6e0b6d0",
+        "level": "info",
+        "content": {
+            "message": "IP récupérée avec succès via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:26:22"
+    },
+    {
+        "id": "LOG_20260919143724_6aae820434c70",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:37:24"
+    },
+    {
+        "id": "LOG_20260919143724_6aae820464190",
+        "level": "debug",
+        "content": {
+            "message": "Réponse cURL reçue",
+            "service": "http:\/\/httpbin.org\/ip",
+            "http_code": 200,
+            "duration_ms": 192.21
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.curl.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:37:24"
+    },
+    {
+        "id": "LOG_20260919143724_6aae8204651ee",
+        "level": "info",
+        "content": {
+            "message": "IP récupérée avec succès via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:37:24"
+    },
+    {
+        "id": "LOG_20260919143809_6aae82316c13a",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:38:09"
+    },
+    {
+        "id": "LOG_20260919143809_6aae8231aa21a",
+        "level": "debug",
+        "content": {
+            "message": "Réponse cURL reçue",
+            "service": "http:\/\/httpbin.org\/ip",
+            "http_code": 200,
+            "duration_ms": 251.85
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.curl.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:38:09"
+    },
+    {
+        "id": "LOG_20260919143809_6aae8231ab188",
+        "level": "info",
+        "content": {
+            "message": "IP récupérée avec succès via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:38:09"
+    },
+    {
+        "id": "LOG_20260919144034_6aae82c22767a",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:40:34"
+    },
+    {
+        "id": "LOG_20260919144035_6aae82c31ea39",
+        "level": "warning",
+        "content": {
+            "message": "Erreur technique lors de l'appel API (Code HTTP : 502)",
+            "service": "http:\/\/httpbin.org\/ip",
+            "error": "Unknown error",
+            "curl_error_code": 0,
+            "http_code": 502,
+            "duration_ms": 961.71
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.curl.error",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:40:35"
+    },
+    {
+        "id": "LOG_20260919144035_6aae82c31fd71",
+        "level": "warning",
+        "content": {
+            "message": "Échec de récupération IP sur ce service",
+            "service": "http:\/\/httpbin.org\/ip",
+            "error": "Erreur cURL: , HTTP: 502"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.error",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:40:35"
+    },
+    {
+        "id": "LOG_20260919144035_6aae82c326970",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "https:\/\/api.ipify.org?format=json"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:40:35"
+    },
+    {
+        "id": "LOG_20260919144035_6aae82c347fd0",
+        "level": "debug",
+        "content": {
+            "message": "Réponse cURL reçue",
+            "service": "https:\/\/api.ipify.org?format=json",
+            "http_code": 200,
+            "duration_ms": 122.01
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.curl.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:40:35"
+    },
+    {
+        "id": "LOG_20260919144035_6aae82c348d06",
+        "level": "info",
+        "content": {
+            "message": "IP récupérée avec succès via API",
+            "service": "https:\/\/api.ipify.org?format=json"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 14:40:35"
+    },
+    {
+        "id": "LOG_20260919162133_6aae9a6dcf349",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/todos",
+            "method": "POST",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 16:21:33"
+    },
+    {
+        "id": "LOG_20260919162134_6aae9a6e1a400",
+        "level": "debug",
+        "content": {
+            "message": "Réponse cURL reçue",
+            "service": "http:\/\/httpbin.org\/ip",
+            "http_code": 200,
+            "duration_ms": 217.11
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/todos",
+            "method": "POST",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.curl.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 16:21:34"
+    },
+    {
+        "id": "LOG_20260919162134_6aae9a6e1bc1b",
+        "level": "info",
+        "content": {
+            "message": "IP récupérée avec succès via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/todos",
+            "method": "POST",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 16:21:34"
+    },
+    {
+        "id": "LOG_20260919172423_6aaea9274847c",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/todos\/01a0ba15-f4f6-7384-9608-9d9765e9f2ab",
+            "method": "PUT",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 17:24:23"
+    },
+    {
+        "id": "LOG_20260919172423_6aaea92779173",
+        "level": "debug",
+        "content": {
+            "message": "Réponse cURL reçue",
+            "service": "http:\/\/httpbin.org\/ip",
+            "http_code": 200,
+            "duration_ms": 195.2
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/todos\/01a0ba15-f4f6-7384-9608-9d9765e9f2ab",
+            "method": "PUT",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.curl.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 17:24:23"
+    },
+    {
+        "id": "LOG_20260919172423_6aaea9277a302",
+        "level": "info",
+        "content": {
+            "message": "IP récupérée avec succès via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/todos\/01a0ba15-f4f6-7384-9608-9d9765e9f2ab",
+            "method": "PUT",
+            "uid": "fagathe77@gmail.com",
+            "action": "ip.fetch.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-19 17:24:23"
+    }
+]

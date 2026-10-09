@@ -1,0 +1,170 @@
+[
+    {
+        "id": "LOG_20260919114149_6aae58ddd83c3",
+        "level": "info",
+        "content": {
+            "message": "Pagination appliquée",
+            "page": 1,
+            "limit": 20,
+            "total_items": 0,
+            "options": {
+                "defaultSortFieldName": null,
+                "defaultSortDirection": "DESC",
+                "sortFieldWhitelist": [],
+                "filterFieldWhitelist": [],
+                "distinct": true
+            }
+        },
+        "context": {
+            "ip": "128.79.243.31",
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "pagination.generic",
+            "origin": "service\/todo-tag-service"
+        },
+        "timestamp": "2026-09-19 11:41:49"
+    },
+    {
+        "id": "LOG_20260919114330_6aae59449db58",
+        "level": "info",
+        "content": {
+            "message": "Pagination appliquée",
+            "page": 1,
+            "limit": 20,
+            "total_items": 0,
+            "options": {
+                "defaultSortFieldName": null,
+                "defaultSortDirection": "DESC",
+                "sortFieldWhitelist": [],
+                "filterFieldWhitelist": [],
+                "distinct": true
+            }
+        },
+        "context": {
+            "ip": "128.79.243.31",
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "pagination.generic",
+            "origin": "service\/todo-tag-service"
+        },
+        "timestamp": "2026-09-19 11:43:30"
+    },
+    {
+        "id": "LOG_20260919142620_6aae7f6e0ea21",
+        "level": "info",
+        "content": {
+            "message": "Pagination appliquée",
+            "page": 1,
+            "limit": 20,
+            "total_items": 0,
+            "options": {
+                "defaultSortFieldName": null,
+                "defaultSortDirection": "DESC",
+                "sortFieldWhitelist": [],
+                "filterFieldWhitelist": [],
+                "distinct": true
+            }
+        },
+        "context": {
+            "ip": "128.79.243.31",
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "pagination.generic",
+            "origin": "service\/todo-tag-service"
+        },
+        "timestamp": "2026-09-19 14:26:20"
+    },
+    {
+        "id": "LOG_20260919143724_6aae82046919d",
+        "level": "info",
+        "content": {
+            "message": "Pagination appliquée",
+            "page": 1,
+            "limit": 20,
+            "total_items": 0,
+            "options": {
+                "defaultSortFieldName": null,
+                "defaultSortDirection": "DESC",
+                "sortFieldWhitelist": [],
+                "filterFieldWhitelist": [],
+                "distinct": true
+            }
+        },
+        "context": {
+            "ip": "128.79.243.31",
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "pagination.generic",
+            "origin": "service\/todo-tag-service"
+        },
+        "timestamp": "2026-09-19 14:37:24"
+    },
+    {
+        "id": "LOG_20260919143809_6aae8231afd23",
+        "level": "info",
+        "content": {
+            "message": "Pagination appliquée",
+            "page": 1,
+            "limit": 20,
+            "total_items": 0,
+            "options": {
+                "defaultSortFieldName": null,
+                "defaultSortDirection": "DESC",
+                "sortFieldWhitelist": [],
+                "filterFieldWhitelist": [],
+                "distinct": true
+            }
+        },
+        "context": {
+            "ip": "128.79.243.31",
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "pagination.generic",
+            "origin": "service\/todo-tag-service"
+        },
+        "timestamp": "2026-09-19 14:38:09"
+    },
+    {
+        "id": "LOG_20260919144034_6aae82c34c145",
+        "level": "info",
+        "content": {
+            "message": "Pagination appliquée",
+            "page": 1,
+            "limit": 20,
+            "total_items": 0,
+            "options": {
+                "defaultSortFieldName": null,
+                "defaultSortDirection": "DESC",
+                "sortFieldWhitelist": [],
+                "filterFieldWhitelist": [],
+                "distinct": true
+            }
+        },
+        "context": {
+            "ip": "128.79.243.31",
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/tags",
+            "method": "GET",
+            "uid": "fagathe77@gmail.com",
+            "action": "pagination.generic",
+            "origin": "service\/todo-tag-service"
+        },
+        "timestamp": "2026-09-19 14:40:34"
+    }
+]

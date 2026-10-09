@@ -1,0 +1,42 @@
+[
+    {
+        "id": "LOG_20260919162133_6aae9a6e26437",
+        "level": "critical",
+        "content": {
+            "message": "Erreur critique lors de la création du todo",
+            "user": "fagathe77@gmail.com",
+            "error": "Undefined method \"save\". The method name must start with either findBy, findOneBy or countBy!"
+        },
+        "context": {
+            "ip": "128.79.243.31",
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/todos",
+            "method": "POST",
+            "uid": "fagathe77@gmail.com",
+            "action": "todo.create.critical_error",
+            "origin": "service\/todo-service"
+        },
+        "timestamp": "2026-09-19 16:21:33"
+    },
+    {
+        "id": "LOG_20260919172423_6aaea92789114",
+        "level": "critical",
+        "content": {
+            "message": "Erreur critique lors de la mise à jour du todo",
+            "todo_id": "01a0ba15-f4f6-7384-9608-9d9765e9f2ab",
+            "error": "A new entity was found through the relationship 'App\\Entity\\Todo#tag' that was not configured to cascade persist operations for entity: App\\Entity\\TodoTag@7781. To solve this issue: Either explicitly call EntityManager#persist() on this unknown entity or configure cascade persist this association in the mapping for example #[ORM\\ManyToOne(..., cascade: ['persist'])]. If you cannot find out which entity causes the problem implement 'App\\Entity\\TodoTag#__toString()' to get a clue."
+        },
+        "context": {
+            "ip": "128.79.243.31",
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/todos\/01a0ba15-f4f6-7384-9608-9d9765e9f2ab",
+            "method": "PUT",
+            "uid": "fagathe77@gmail.com",
+            "action": "todo.update.critical_error",
+            "origin": "service\/todo-service"
+        },
+        "timestamp": "2026-09-19 17:24:23"
+    }
+]

@@ -1,0 +1,273 @@
+[
+    {
+        "id": "LOG_20260918153107_6aad3d1ba2b31",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:31:07"
+    },
+    {
+        "id": "LOG_20260918153107_6aad3d1be9154",
+        "level": "debug",
+        "content": {
+            "message": "Réponse cURL reçue",
+            "service": "http:\/\/httpbin.org\/ip",
+            "http_code": 200,
+            "duration_ms": 286.25
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.curl.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:31:07"
+    },
+    {
+        "id": "LOG_20260918153107_6aad3d1bea42f",
+        "level": "info",
+        "content": {
+            "message": "IP récupérée avec succès via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.fetch.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:31:07"
+    },
+    {
+        "id": "LOG_20260918153742_6aad3ea618c3b",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:37:42"
+    },
+    {
+        "id": "LOG_20260918153747_6aad3eab1be8d",
+        "level": "warning",
+        "content": {
+            "message": "Erreur technique lors de l'appel API (Code HTTP : 0)",
+            "service": "http:\/\/httpbin.org\/ip",
+            "error": "Operation timed out after 5010 milliseconds with 0 bytes received",
+            "curl_error_code": 28,
+            "http_code": 0,
+            "duration_ms": 5010.49
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.curl.error",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:37:47"
+    },
+    {
+        "id": "LOG_20260918153747_6aad3eab1cd28",
+        "level": "warning",
+        "content": {
+            "message": "Échec de récupération IP sur ce service",
+            "service": "http:\/\/httpbin.org\/ip",
+            "error": "Erreur cURL: Operation timed out after 5010 milliseconds with 0 bytes received, HTTP: 0"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.fetch.error",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:37:47"
+    },
+    {
+        "id": "LOG_20260918153747_6aad3eab248f9",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "https:\/\/api.ipify.org?format=json"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:37:47"
+    },
+    {
+        "id": "LOG_20260918153747_6aad3eab52d70",
+        "level": "debug",
+        "content": {
+            "message": "Réponse cURL reçue",
+            "service": "https:\/\/api.ipify.org?format=json",
+            "http_code": 200,
+            "duration_ms": 155.98
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.curl.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:37:47"
+    },
+    {
+        "id": "LOG_20260918153747_6aad3eab541b8",
+        "level": "info",
+        "content": {
+            "message": "IP récupérée avec succès via API",
+            "service": "https:\/\/api.ipify.org?format=json"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.fetch.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:37:47"
+    },
+    {
+        "id": "LOG_20260918153839_6aad3edf3b1fb",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "http:\/\/httpbin.org\/ip"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:38:39"
+    },
+    {
+        "id": "LOG_20260918153844_6aad3ee43f32a",
+        "level": "warning",
+        "content": {
+            "message": "Erreur technique lors de l'appel API (Code HTTP : 0)",
+            "service": "http:\/\/httpbin.org\/ip",
+            "error": "Operation timed out after 5013 milliseconds with 0 bytes received",
+            "curl_error_code": 28,
+            "http_code": 0,
+            "duration_ms": 5014.26
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.curl.error",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:38:44"
+    },
+    {
+        "id": "LOG_20260918153844_6aad3ee440134",
+        "level": "warning",
+        "content": {
+            "message": "Échec de récupération IP sur ce service",
+            "service": "http:\/\/httpbin.org\/ip",
+            "error": "Erreur cURL: Operation timed out after 5013 milliseconds with 0 bytes received, HTTP: 0"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.fetch.error",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:38:44"
+    },
+    {
+        "id": "LOG_20260918153844_6aad3ee444eed",
+        "level": "debug",
+        "content": {
+            "message": "Tentative de récupération IP via API",
+            "service": "https:\/\/api.ipify.org?format=json"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.fetch.attempt",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:38:44"
+    },
+    {
+        "id": "LOG_20260918153844_6aad3ee473be0",
+        "level": "debug",
+        "content": {
+            "message": "Réponse cURL reçue",
+            "service": "https:\/\/api.ipify.org?format=json",
+            "http_code": 200,
+            "duration_ms": 150.84
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.curl.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:38:44"
+    },
+    {
+        "id": "LOG_20260918153844_6aad3ee4754af",
+        "level": "info",
+        "content": {
+            "message": "IP récupérée avec succès via API",
+            "service": "https:\/\/api.ipify.org?format=json"
+        },
+        "context": {
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "ip.fetch.success",
+            "origin": "ip-checker\/find-ip"
+        },
+        "timestamp": "2026-09-18 15:38:44"
+    }
+]

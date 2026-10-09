@@ -1,0 +1,59 @@
+[
+    {
+        "id": "LOG_20260918153107_6aad3d1bef50c",
+        "level": "critical",
+        "content": {
+            "message": "Erreur critique lors de l'inscription",
+            "user": "test",
+            "error": "An exception occurred in the driver: SQLSTATE[HY000] [1049] Unknown database 'sf-todo-api'"
+        },
+        "context": {
+            "ip": "128.79.243.31",
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "user.register.critical_error",
+            "origin": "service\/user-service"
+        },
+        "timestamp": "2026-09-18 15:31:07"
+    },
+    {
+        "id": "LOG_20260918153742_6aad3eab5a223",
+        "level": "critical",
+        "content": {
+            "message": "Erreur critique lors de l'inscription",
+            "user": "test",
+            "error": "An exception occurred while executing a query: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'fagathe@gmail.com' for key 'user.UNIQ_IDENTIFIER_EMAIL'"
+        },
+        "context": {
+            "ip": "128.79.243.31",
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "user.register.critical_error",
+            "origin": "service\/user-service"
+        },
+        "timestamp": "2026-09-18 15:37:42"
+    },
+    {
+        "id": "LOG_20260918153839_6aad3ee47db5c",
+        "level": "critical",
+        "content": {
+            "message": "Erreur critique lors de l'inscription",
+            "user": "test",
+            "error": "An exception occurred while executing a query: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'fagathe@gmail.com' for key 'user.UNIQ_IDENTIFIER_EMAIL'"
+        },
+        "context": {
+            "ip": "128.79.243.31",
+            "device": "Desktop",
+            "browser": "Unknown Browser",
+            "url": "http:\/\/react-todo-api.dev.frederickagathe.fr\/auth\/register",
+            "method": "POST",
+            "action": "user.register.critical_error",
+            "origin": "service\/user-service"
+        },
+        "timestamp": "2026-09-18 15:38:39"
+    }
+]
