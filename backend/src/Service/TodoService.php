@@ -6,6 +6,7 @@ use App\Entity\Tag;
 use App\Entity\Todo;
 use App\Entity\TodoFile;
 use App\Entity\User;
+use App\Service\AttachmentFileService;
 use App\Repository\TodoRepository;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -29,7 +30,7 @@ final class TodoService
         private readonly Security $security,
         private readonly TodoRepository $repository,
         private readonly ValidatorInterface $validator,
-        private readonly TodoFileService $todoFileService,
+        private readonly AttachmentFileService $attachmentFileService,
     ) {}
 
     public function findOneTodo(string $id): ?Todo
@@ -160,7 +161,7 @@ final class TodoService
         $files = $this->extractUploadedFiles($request);
         try {
             foreach ($files as $file) {
-                $this->todoFileService->upload($file, $todo, $user);
+                $this->attachmentFileService->upload($file, $todo, $user);
             }
         } catch (FileUploadException $e) {
             return $this->sendJson(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -189,7 +190,7 @@ final class TodoService
     {
         try {
             // Nettoyage des fichiers physiques avant suppression en base
-            $this->todoFileService->deleteByTodo($todo);
+            $this->attachmentFileService->deleteByTarget($todo);
             $this->repository->remove($todo, true);
 
             return $this->sendNoContent();
@@ -221,7 +222,7 @@ final class TodoService
             return $this->sendJson(['message' => 'Fichier introuvable sur cette tâche.'], Response::HTTP_NOT_FOUND);
         }
 
-        $this->todoFileService->delete($file);
+        $this->attachmentFileService->delete($file);
 
         return $this->sendNoContent();
     }

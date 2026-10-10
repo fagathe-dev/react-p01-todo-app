@@ -94,6 +94,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatar = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $journalPasscode = null;
+
     public function __construct()
     {
         $this->id = Uuid::v7();
@@ -340,5 +343,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->avatar = $avatar;
 
         return $this;
+    }
+
+    public function getJournalPasscode(): ?string
+    {
+        return $this->journalPasscode;
+    }
+
+    public function setJournalPasscode(?string $journalPasscode): static
+    {
+        $this->journalPasscode = $journalPasscode;
+        return $this;
+    }
+
+    public function hasJournalPasscode(): bool
+    {
+        return $this->journalPasscode !== null;
     }
 }

@@ -34,10 +34,6 @@ class Entry extends AbstractTextEntry
     #[Groups(['entry.list', 'entry.read'])]
     private ?string $slug = null;
 
-    #[ORM\Column(options: ['default' => true])]
-    #[Groups(['entry.read'])]
-    private bool $isPrivate = true;
-
     #[ORM\ManyToOne(targetEntity: Tag::class, inversedBy: 'entries')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[Groups(['entry.list', 'entry.read'])]
@@ -107,17 +103,6 @@ class Entry extends AbstractTextEntry
     public function setSlug(?string $slug): static
     {
         $this->slug = $slug;
-        return $this;
-    }
-
-    public function isPrivate(): bool
-    {
-        return $this->isPrivate;
-    }
-
-    public function setIsPrivate(bool $isPrivate): static
-    {
-        $this->isPrivate = $isPrivate;
         return $this;
     }
 
