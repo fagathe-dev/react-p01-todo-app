@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: NoteFileRepository::class)]
 class NoteFile extends AbstractFile
 {
-    #[ORM\ManyToOne(inversedBy: 'files')]
+    #[ORM\ManyToOne(inversedBy: 'noteFiles')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Note $note = null;
 

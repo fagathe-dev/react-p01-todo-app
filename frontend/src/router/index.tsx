@@ -1,40 +1,91 @@
 import { AppLayout } from '@/layouts/AppLayout';
 import { AuthLayout } from '@/layouts/AuthLayout';
-import { LoginPage } from '@/pages/auth/LoginPage';
-import { LogoutPage } from '@/pages/auth/LogoutPage';
-import { RegisterPage } from '@/pages/auth/RegisterPage';
-import { TagsPage } from '@/pages/tags/TagsPage';
-import { TasksPage } from '@/pages/tasks/TasksPage';
+import {
+  JournalCreatePage,
+  JournalDetailsPage,
+  JournalEditPage,
+  JournalsPage,
+  LoginPage,
+  NoteCreatePage,
+  NoteEditPage,
+  NotesArchivePage,
+  NotesPage,
+  NotesTrashPage,
+  ProfilePage,
+  RegisterPage,
+  TagsPage,
+  TodoPage,
+} from '@/pages';
 import { ProtectedRoute } from '@/router/protectedRoute';
 import { PublicRoute } from '@/router/publicRoute';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 export const router = createBrowserRouter([
-  // 1. Espace connecté : redirection vers /login si déconnecté
+  // 1. Espace connecté (Sidebar Dashboard via AppLayout)
   {
     element: <ProtectedRoute />,
     children: [
       {
         element: <AppLayout />,
         children: [
+          // Redirection racine vers les todos
           {
             path: '/',
-            element: <TasksPage />,
+            element: <Navigate to="/todos" replace />,
           },
+
+          // Module Todos
+          {
+            path: '/todos',
+            element: <TodoPage />,
+          },
+
+          // Module Tags
           {
             path: '/tags',
             element: <TagsPage />,
           },
+
+          // Module Notes
           {
-            path: '/logout',
-            element: <LogoutPage />,
+            path: '/notes',
+            children: [
+              { index: true, element: <NotesPage /> },
+              { path: 'new', element: <NoteCreatePage /> },
+              { path: ':id', element: <NoteEditPage /> },
+            ],
+          },
+          {
+            path: '/archives',
+            element: <NotesArchivePage />,
+          },
+          {
+            path: '/trash',
+            element: <NotesTrashPage />,
+          },
+
+          // Module Journal intime
+          {
+            path: '/journal',
+            children: [
+              { index: true, element: <JournalsPage /> },
+              { path: 'new', element: <JournalCreatePage /> },
+              { path: ':journalId', element: <JournalDetailsPage /> },
+              { path: ':journalId/edit', element: <JournalEditPage /> },
+            ],
+          },
+
+          // Gestion du compte & profil
+          {
+            path: '/profile',
+            element: <ProfilePage />,
           },
         ],
       },
     ],
   },
 
-  // 2. Espace visiteur : redirection vers / si déjà connecté
+  // 2. Espace public (Connexion & Inscription)
   {
     element: <PublicRoute />,
     children: [
@@ -54,7 +105,7 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // 3. Redirection par défaut (routes inexistantes)
+  // 3. Fallback 404
   {
     path: '*',
     element: <Navigate to="/" replace />,

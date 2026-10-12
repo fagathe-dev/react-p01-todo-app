@@ -11,9 +11,9 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { TaskCard } from './TaskCard';
-import { TaskEditModal } from './TaskEditModal';
-import { TaskQuickCreate } from './TaskQuickCreate';
+import { TaskCard } from './TodoCard';
+import { TaskEditModal } from './TodoEditModal';
+import { TaskQuickCreate } from './TodoQuickCreate';
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -145,7 +145,7 @@ const SECTION_CONFIG: Array<{
   { key: 'later', label: 'Plus tard', icon: 'calendar-clock' },
 ];
 
-export const TasksPage = () => {
+export const TodoPage = () => {
   const [tasks, setTasks] = useState<TaskResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

@@ -11,27 +11,24 @@ parameters:
 services:
     # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
+        autowire: true # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        bind: 
-            string $projectDir: '%kernel.project_dir%'
+        bind:
+            string $projectDir: "%kernel.project_dir%"
+            string $defaultUri: "%env(DEFAULT_URI)%"
             # string $uploadDir: 'uploads'
             # string $environment: '%kernel.environment%'
-            ?string $defaultUri: '%env(DEFAULT_URI)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
-        resource: '../src/'
-    
-    Fagathe\CorePhp\:
-        resource: '../vendor/fagathe-dev/core-php/src/'
+        resource: "../src/"
 
-    
+    Fagathe\CorePhp\:
+        resource: "../vendor/fagathe-dev/core-php/src/"
+
     # App\EventListener\LoginSuccessListener:
     #     tags: [kernel.event_listener]
-
-
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

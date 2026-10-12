@@ -31,7 +31,7 @@ class Location
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $country = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'locations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 

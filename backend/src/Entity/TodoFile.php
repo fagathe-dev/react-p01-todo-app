@@ -12,7 +12,7 @@ class TodoFile extends AbstractFile
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Todo $todo = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'todoFiles')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?User $owner = null;
 

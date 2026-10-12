@@ -18,7 +18,6 @@ use Fagathe\CorePhp\Trait\LoggerTrait;
 use Fagathe\CorePhp\Uploader\FileUploadException;
 use Fagathe\CorePhp\Uploader\UploaderService;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -38,7 +37,6 @@ final class AccountService
         private readonly SerializerInterface $serializer,
         private readonly UserPasswordHasherInterface $hasher,
         private readonly UploaderService $uploader,
-        #[Autowire(env: 'default::DEFAULT_URI')]
         private readonly ?string $defaultUri = null,
     ) {}
 

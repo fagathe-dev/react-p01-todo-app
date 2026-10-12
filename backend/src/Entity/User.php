@@ -79,6 +79,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Todo::class, mappedBy: 'owner', cascade: ['remove', 'persist'], orphanRemoval: true)]
     private Collection $todos;
 
+    /**
+     * @var Collection<int, Note>
+     */
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'owner', cascade: ['remove', 'persist'], orphanRemoval: true)]
+    private Collection $notes;
+
+    /**
+     * @var Collection<int, Entry>
+     */
+    #[ORM\OneToMany(targetEntity: Entry::class, mappedBy: 'owner', cascade: ['remove', 'persist'], orphanRemoval: true)]
+    private Collection $entries;
+
+    /**
+     * @var Collection<int, TodoFile>
+     */
+    #[ORM\OneToMany(targetEntity: TodoFile::class, mappedBy: 'owner', cascade: ['persist'])]
+    private Collection $todoFiles;
+
+    /**
+     * @var Collection<int, NoteFile>
+     */
+    #[ORM\OneToMany(targetEntity: NoteFile::class, mappedBy: 'owner', cascade: ['persist'])]
+    private Collection $noteFiles;
+
+    /**
+     * @var Collection<int, EntryMedia>
+     */
+    #[ORM\OneToMany(targetEntity: EntryMedia::class, mappedBy: 'owner', cascade: ['persist'])]
+    private Collection $entryMedia;
+
+    /**
+     * @var Collection<int, Location>
+     */
+    #[ORM\OneToMany(targetEntity: Location::class, mappedBy: 'owner', cascade: ['remove', 'persist'], orphanRemoval: true)]
+    private Collection $locations;
+
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $emailVerifiedAt = null;
 
@@ -102,6 +138,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->id = Uuid::v7();
         $this->tags = new ArrayCollection();
         $this->todos = new ArrayCollection();
+        $this->notes = new ArrayCollection();
+        $this->entries = new ArrayCollection();
+        $this->todoFiles = new ArrayCollection();
+        $this->noteFiles = new ArrayCollection();
+        $this->entryMedia = new ArrayCollection();
+        $this->locations = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -275,6 +317,180 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($todo->getOwner() === $this) {
                 $todo->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Note>
+     */
+    public function getNotes(): Collection
+    {
+        return $this->notes;
+    }
+
+    public function addNote(Note $note): static
+    {
+        if (!$this->notes->contains($note)) {
+            $this->notes->add($note);
+            $note->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNote(Note $note): static
+    {
+        if ($this->notes->removeElement($note)) {
+            if ($note->getOwner() === $this) {
+                $note->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Entry>
+     */
+    public function getEntries(): Collection
+    {
+        return $this->entries;
+    }
+
+    public function addEntry(Entry $entry): static
+    {
+        if (!$this->entries->contains($entry)) {
+            $this->entries->add($entry);
+            $entry->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEntry(Entry $entry): static
+    {
+        if ($this->entries->removeElement($entry)) {
+            if ($entry->getOwner() === $this) {
+                $entry->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TodoFile>
+     */
+    public function getTodoFiles(): Collection
+    {
+        return $this->todoFiles;
+    }
+
+    public function addTodoFile(TodoFile $todoFile): static
+    {
+        if (!$this->todoFiles->contains($todoFile)) {
+            $this->todoFiles->add($todoFile);
+            $todoFile->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTodoFile(TodoFile $todoFile): static
+    {
+        if ($this->todoFiles->removeElement($todoFile)) {
+            if ($todoFile->getOwner() === $this) {
+                $todoFile->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, NoteFile>
+     */
+    public function getNoteFiles(): Collection
+    {
+        return $this->noteFiles;
+    }
+
+    public function addNoteFile(NoteFile $noteFile): static
+    {
+        if (!$this->noteFiles->contains($noteFile)) {
+            $this->noteFiles->add($noteFile);
+            $noteFile->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNoteFile(NoteFile $noteFile): static
+    {
+        if ($this->noteFiles->removeElement($noteFile)) {
+            if ($noteFile->getOwner() === $this) {
+                $noteFile->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EntryMedia>
+     */
+    public function getEntryMedia(): Collection
+    {
+        return $this->entryMedia;
+    }
+
+    public function addEntryMedium(EntryMedia $entryMedium): static
+    {
+        if (!$this->entryMedia->contains($entryMedium)) {
+            $this->entryMedia->add($entryMedium);
+            $entryMedium->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEntryMedium(EntryMedia $entryMedium): static
+    {
+        if ($this->entryMedia->removeElement($entryMedium)) {
+            if ($entryMedium->getOwner() === $this) {
+                $entryMedium->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Location>
+     */
+    public function getLocations(): Collection
+    {
+        return $this->locations;
+    }
+
+    public function addLocation(Location $location): static
+    {
+        if (!$this->locations->contains($location)) {
+            $this->locations->add($location);
+            $location->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLocation(Location $location): static
+    {
+        if ($this->locations->removeElement($location)) {
+            if ($location->getOwner() === $this) {
+                $location->setOwner(null);
             }
         }
 
