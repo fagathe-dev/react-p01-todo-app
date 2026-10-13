@@ -5,7 +5,7 @@ export const SidebarNav = styled.nav<BaseComponentProps>`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: ${({ theme }) => `${theme.spacing[3]}${theme.spacing[2]}`};
+  padding: ${({ theme }) => `${theme.spacing[3]} ${theme.spacing[2]}`};
   gap: ${({ theme }) => theme.spacing[1]};
   overflow-y: auto;
   box-sizing: border-box;

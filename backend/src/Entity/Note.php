@@ -43,6 +43,7 @@ class Note extends AbstractTextEntry
 
     public function __construct()
     {
+        parent::__construct();
         $this->files = new ArrayCollection();
     }
 

@@ -35,10 +35,10 @@ import styled from 'styled-components';
 
 const DashboardRoot = styled.div`
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.background.body};
-  overflow-x: hidden;
+  overflow: hidden;
 `;
 
 const ContentArea = styled.div`
@@ -46,11 +46,28 @@ const ContentArea = styled.div`
   flex-direction: column;
   flex: 1;
   min-width: 0;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 `;
 
-const MainContent = styled(Container).attrs({ as: 'main' })`
-  flex: 1 0 auto;
+const ScrollArea = styled.main`
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  box-sizing: border-box;
+
+  /* Défilement fluide et discret */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.colors.border.default};
+    border-radius: ${({ theme }) => theme.radii.full};
+  }
+`;
+
+const MainContent = styled(Container)`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -136,16 +153,16 @@ export const AppLayout: React.FC = () => {
   const location = useLocation();
 
   const isCurrentPath = (path: string) =>
-    location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
+    location.pathname === path ||
+    (path !== '/' && location.pathname.startsWith(path));
 
   return (
     <SidebarProvider breakpoint="md">
       <DashboardRoot>
         {/* ================================================================= */}
-        {/* SIDEBAR : Menu principal des modules métier                       */}
+        {/* SIDEBAR : Reste fixe à gauche, avec son propre scroll interne     */}
         {/* ================================================================= */}
         <Sidebar width="260px" breakpoint="md">
-          {/* Logo & Identité */}
           <SidebarHeader>
             <BrandLink to="/todos">
               <Image
@@ -160,7 +177,6 @@ export const AppLayout: React.FC = () => {
             </BrandLink>
           </SidebarHeader>
 
-          {/* Navigation par sections */}
           <SidebarNav>
             <SidebarSection>Espaces de travail</SidebarSection>
             {PRIMARY_MODULES.map(({ label, path, icon }) => {
@@ -199,7 +215,6 @@ export const AppLayout: React.FC = () => {
             })}
           </SidebarNav>
 
-          {/* Pied de la Sidebar : aperçu utilisateur & raccourci déconnexion */}
           <SidebarFooter>
             <UserProfilePreview>
               <Avatar
@@ -208,7 +223,7 @@ export const AppLayout: React.FC = () => {
                 size="sm"
               />
               <UserMeta>
-                <Text weight="semibold" size="xs" color="heading" truncate>
+                <Text weight="semibold" size="xs" color="tertiary">
                   {user?.username ?? 'Utilisateur'}
                 </Text>
                 <Text size="xs" color="muted" truncate>
@@ -220,21 +235,30 @@ export const AppLayout: React.FC = () => {
         </Sidebar>
 
         {/* ================================================================= */}
-        {/* ZONE DE CONTENU : Navbar supérieure + Outlet central              */}
+        {/* ZONE DE CONTENU : Navbar fixe en haut, ScrollArea seule à défiler */}
         {/* ================================================================= */}
         <ContentArea>
           <Navbar sticky breakpoint="md">
-            {/* Toggler pour afficher la sidebar sur mobile */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
               <SidebarToggle />
               <NavbarBrand>
-                <Text weight="medium" size="sm" color="heading">
+                <Text
+                  weight="medium"
+                  size="sm"
+                  color="tertiary"
+                  style={{ paddingInline: 10 }}
+                >
                   Mon Espace
                 </Text>
               </NavbarBrand>
             </div>
 
-            {/* Menu Navbar Collapse avec profil, thème et déconnexion */}
             <NavbarCollapse>
               <NavbarNav as="ul" style={{ marginLeft: 'auto' }}>
                 <NavbarItem as="li">
@@ -248,7 +272,6 @@ export const AppLayout: React.FC = () => {
                     </AvatarToggle>
 
                     <NavbarDropdownMenu align="right">
-                      {/* Lien vers le profil (/profile) */}
                       <NavbarDropdownItem as={Link} to="/profile">
                         <MenuActionContent>
                           <span>Mon profil</span>
@@ -258,7 +281,6 @@ export const AppLayout: React.FC = () => {
 
                       <NavbarDropdownDivider />
 
-                      {/* Bascule du thème Sombre / Clair */}
                       <NavbarDropdownItem onClick={toggleTheme}>
                         <MenuActionContent>
                           <span>{isDark ? 'Mode clair' : 'Mode sombre'}</span>
@@ -271,7 +293,6 @@ export const AppLayout: React.FC = () => {
 
                       <NavbarDropdownDivider />
 
-                      {/* Déconnexion */}
                       <NavbarDropdownItem as={Link} to="/logout">
                         <MenuActionContent>
                           <span>Se déconnecter</span>
@@ -285,10 +306,12 @@ export const AppLayout: React.FC = () => {
             </NavbarCollapse>
           </Navbar>
 
-          {/* Affichage des pages enfants */}
-          <MainContent>
-            <Outlet />
-          </MainContent>
+          {/* Seul ce conteneur défile désormais */}
+          <ScrollArea>
+            <MainContent>
+              <Outlet />
+            </MainContent>
+          </ScrollArea>
         </ContentArea>
       </DashboardRoot>
     </SidebarProvider>

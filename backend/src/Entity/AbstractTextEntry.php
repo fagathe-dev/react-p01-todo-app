@@ -15,17 +15,21 @@ abstract class AbstractTextEntry
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[Groups(['user.read'])]
     private ?Uuid $id = null;
-
+    
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['note.read', 'entry.read'])]
     protected ?string $content = null;
-
+    
     #[ORM\Column]
+    #[Groups(['note.read', 'entry.read'])]
     protected ?\DateTimeImmutable $created_at = null;
-
+    
     #[ORM\Column(nullable: true)]
+    #[Groups(['note.read', 'entry.read'])]
     protected ?\DateTimeImmutable $updated_at = null;
-
+    
     #[ORM\Column(nullable: true)]
+    #[Groups(['note.read', 'entry.read'])]
     protected ?bool $is_pinned = null;
 
     public function __construct()

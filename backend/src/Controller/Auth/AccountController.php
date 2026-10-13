@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Auth;
 
 use App\Service\AccountService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

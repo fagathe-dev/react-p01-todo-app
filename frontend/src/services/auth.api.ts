@@ -18,6 +18,7 @@ export interface LoginPayload {
 }
 
 const AUTH_BASE_URL = '/auth';
+const ACCOUNT_BASE_URL = '/account';
 
 export const fetchRegister = async (
   payload: RegisterPayload
@@ -55,7 +56,7 @@ export const fetchLogin = async (
 };
 
 export const fetchProfile = async (token?: string): Promise<User> => {
-  const res = await fetchAPI<User>(`${AUTH_BASE_URL}/profile`, {
+  const res = await fetchAPI<User>(`${ACCOUNT_BASE_URL}/profile`, {
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   });
 

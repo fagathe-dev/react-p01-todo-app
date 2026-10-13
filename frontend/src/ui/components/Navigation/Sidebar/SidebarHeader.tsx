@@ -6,7 +6,7 @@ export const SidebarHeader = styled.div<BaseComponentProps>`
   align-items: center;
   justify-content: space-between;
   min-height: 56px;
-  padding: ${({ theme }) => `${theme.spacing[3]}${theme.spacing[4]}`};
+  padding: ${({ theme }) => `${theme.spacing[3]} ${theme.spacing[4]}`};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.default};
   box-sizing: border-box;
   gap: ${({ theme }) => theme.spacing[2]};

@@ -24,13 +24,18 @@ const ToggleButton = styled.button<{ $breakpoint?: string }>`
   ${({ $breakpoint, theme }) =>
     $breakpoint &&
     css`
-      @media (max-width: ${theme.breakpoints[$breakpoint as keyof typeof theme.breakpoints]}) {
+      @media (max-width: ${theme.breakpoints[
+          $breakpoint as keyof typeof theme.breakpoints
+        ]}) {
         display: inline-flex;
       }
     `}
 `;
 
-export const NavbarToggle: React.FC<ClickableComponentProps> = ({ children, ...props }) => {
+export const NavbarToggle: React.FC<ClickableComponentProps> = ({
+  children,
+  ...props
+}) => {
   const { isOpen, toggle, breakpoint } = useNavbar();
 
   return (

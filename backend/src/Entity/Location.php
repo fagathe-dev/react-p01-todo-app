@@ -3,17 +3,22 @@
 namespace App\Entity;
 
 use App\Repository\LocationRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
 class Location
 {
+
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    protected ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['entry.read'])]
     private ?string $name = null;
 
     #[ORM\Column]
@@ -23,17 +28,33 @@ class Location
     private ?float $longitude = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['entry.read'])]
     private ?string $street = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['entry.read'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['entry.read'])]
     private ?string $country = null;
 
     #[ORM\ManyToOne(inversedBy: 'locations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
+
+    #[ORM\Column]
+    #[Groups(['entry.read'])]
+    protected ?DateTimeImmutable $created_at = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['entry.read'])]
+    protected ?DateTimeImmutable $updated_at = null;
+
+    public function __construct()
+    {
+        $this->id = Uuid::v7();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +141,30 @@ class Location
     public function setOwner(?User $owner): static
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(?DateTimeImmutable $updated_at): static
+    {
+        $this->updated_at = $updated_at;
 
         return $this;
     }

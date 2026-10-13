@@ -113,21 +113,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Location>
      */
     #[ORM\OneToMany(targetEntity: Location::class, mappedBy: 'owner', cascade: ['remove', 'persist'], orphanRemoval: true)]
+    #[Groups(['user.read'])]
     private Collection $locations;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $emailVerifiedAt = null;
 
     #[ORM\Column(length: 80, nullable: true)]
+    #[Groups(['user.read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $isVerified = null;
 
     #[ORM\Column(length: 80, nullable: true)]
+    #[Groups(['user.read'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user.read'])]
     private ?string $avatar = null;
 
     #[ORM\Column(length: 255, nullable: true)]

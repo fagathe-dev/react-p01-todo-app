@@ -58,11 +58,19 @@ class Todo
     #[Groups(['todo.read', 'todo.list'])]
     private Collection $files;
 
+    /**
+     * @var Collection<int, TodoComment>
+     */
+    #[ORM\OneToMany(targetEntity: TodoComment::class, mappedBy: 'todo')]
+    #[Groups(['todo.read', 'todo.list'])]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->id = Uuid::v7();
         $this->createdAt = new DateTimeImmutable();
         $this->files = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -183,6 +191,36 @@ class Todo
                 $file->setTodo(null);
             }
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TodoComment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(TodoComment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setTodo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(TodoComment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getTodo() === $this) {
+                $comment->setTodo(null);
+            }
+        }
+
         return $this;
     }
 }

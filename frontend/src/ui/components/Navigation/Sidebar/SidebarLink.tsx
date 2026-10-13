@@ -8,7 +8,7 @@ const StyledLink = styled.button<{ $active?: boolean }>`
   justify-content: space-between;
   width: 100%;
   gap: ${({ theme }) => theme.spacing[2.5]};
-  padding: ${({ theme }) => `${theme.spacing[2]}${theme.spacing[3]}`};
+  padding: ${({ theme }) => `${theme.spacing[2]} ${theme.spacing[3]}`};
   font-family: inherit;
   font-size: ${({ theme }) => theme.typography.sizes.sm};
   font-weight: ${({ theme }) => theme.typography.weights.medium};

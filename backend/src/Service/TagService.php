@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Dto\Tag\CreateTagDto;
+use App\Dto\Tag\UpdateTagDto;
 use App\Entity\Tag;
 use App\Entity\User;
 use App\Repository\TagRepository;
@@ -14,7 +16,6 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
@@ -38,9 +39,6 @@ final class TagService
         return $this->repository->findOneBy(['id' => $id]);
     }
 
-    /**
-     * Liste les tags de l'utilisateur authentifié
-     */
     public function listTags(): object
     {
         $user = $this->getAuthenticatedUser();
@@ -48,15 +46,9 @@ final class TagService
             return $this->sendJson(['message' => 'Utilisateur non authentifié.'], Response::HTTP_UNAUTHORIZED);
         }
 
-
-        $tags = $user->getTags();
-
-        return $this->sendJson($tags, Response::HTTP_OK, context: ['groups' => ['tag.list']]);
+        return $this->sendJson($user->getTags(), Response::HTTP_OK, context: ['groups' => ['tag.list']]);
     }
 
-    /**
-     * Crée un nouveau tag rattaché à l'utilisateur connecté
-     */
     public function createTag(Request $request): object
     {
         $user = $this->getAuthenticatedUser();
@@ -65,131 +57,97 @@ final class TagService
         }
 
         try {
-            /** @var Tag $tag */
-            $tag = $this->serializer->deserialize(
-                $request->getContent(),
-                Tag::class,
-                'json',
-                [
-                    AbstractNormalizer::IGNORED_ATTRIBUTES => ['id', 'owner', 'createdAt', 'updatedAt', 'todos'],
-                ]
-            );
-        } catch (Throwable $e) {
-            return $this->sendJson(['message' => 'Format de données JSON invalide.'], Response::HTTP_BAD_REQUEST);
+            /** @var CreateTagDto $dto */
+            $dto = $this->serializer->deserialize($request->getContent(), CreateTagDto::class, 'json');
+        } catch (Throwable) {
+            return $this->sendJson(['message' => 'Format JSON invalide.'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Assignation automatique du propriétaire
-        $tag->setOwner($user);
-
-        // Validation des règles métier (nom obligatoire, couleur valide selon ColorEnum)
-        $violations = $this->validator->validate($tag);
+        $violations = $this->validator->validate($dto);
         if (count($violations) > 0) {
             return $this->sendViolations($violations);
         }
 
-        // Vérification de l'unicité de la couleur par utilisateur
-        if ($tag->getColor() !== null && $this->repository->colorExistsForUser($user, $tag->getColor())) {
-            return $this->sendViolations(
-                ['color' => 'Vous possédez déjà un tag avec cette couleur.'],
-            );
+        if ($this->repository->colorExistsForUser($user, $dto->color)) {
+            return $this->sendViolations(['color' => 'Vous possédez déjà un tag avec cette couleur.']);
         }
+
+        $tag = new Tag();
+        $tag->setName($dto->name)
+            ->setColor($dto->color)
+            ->setDescription($dto->description)
+            ->setOwner($user);
 
         try {
             $this->repository->save($tag, flush: true, isCreation: true);
-
             return $this->sendJson($tag, Response::HTTP_CREATED, context: ['groups' => ['tag.read']]);
         } catch (Throwable $e) {
             $this->generateLog(
                 LoggerLevelEnum::Critical,
-                [
-                    'message' => 'Erreur critique lors de la création du tag',
-                    'user'    => $user->getUserIdentifier(),
-                    'error'   => $e->getMessage(),
-                ],
+                ['message' => 'Erreur critique création tag', 'user' => $user->getUserIdentifier(), 'error' => $e->getMessage()],
                 ['action' => 'tag.create.critical_error']
             );
-
-            return $this->sendJson(['message' => 'Erreur interne lors de la création du tag.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendJson(['message' => 'Erreur interne.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
-    /**
-     * Met à jour un tag existant après validation
-     */
     public function updateTag(Tag $tag, Request $request): object
     {
         try {
-            $this->serializer->deserialize(
-                $request->getContent(),
-                Tag::class,
-                'json',
-                [
-                    AbstractNormalizer::OBJECT_TO_POPULATE => $tag,
-                    AbstractNormalizer::IGNORED_ATTRIBUTES => ['id', 'owner', 'createdAt', 'updatedAt', 'todos'],
-                ]
-            );
-        } catch (Throwable $e) {
-            return $this->sendJson(['message' => 'Format de données JSON invalide.'], Response::HTTP_BAD_REQUEST);
+            /** @var UpdateTagDto $dto */
+            $dto = $this->serializer->deserialize($request->getContent(), UpdateTagDto::class, 'json');
+        } catch (Throwable) {
+            return $this->sendJson(['message' => 'Format JSON invalide.'], Response::HTTP_BAD_REQUEST);
         }
 
-        $violations = $this->validator->validate($tag);
+        $violations = $this->validator->validate($dto);
         if (count($violations) > 0) {
             return $this->sendViolations($violations);
         }
 
-        // Vérification de l'unicité de la couleur par utilisateur
-        if ($tag->getColor() !== null && $this->repository->colorExistsForUser($tag->getOwner(), $tag->getColor(), $tag->getId())) {
-            return $this->sendViolations(
-                ['color' => 'Vous possédez déjà un tag avec cette couleur.'],
-            );
+        if ($dto->color && $dto->color !== $tag->getColor()?->value) {
+            if ($this->repository->colorExistsForUser($tag->getOwner(), $dto->color, $tag->getId())) {
+                return $this->sendViolations(['color' => 'Vous possédez déjà un tag avec cette couleur.']);
+            }
+            $tag->setColor($dto->color);
+        }
+
+        if ($dto->name !== null) $tag->setName($dto->name);
+        if (array_key_exists('description', json_decode($request->getContent(), true))) {
+            $tag->setDescription($dto->description);
         }
 
         try {
             $this->repository->save($tag, flush: true, isCreation: false);
-
             return $this->sendJson($tag, Response::HTTP_OK, context: ['groups' => ['tag.read']]);
         } catch (Throwable $e) {
             $this->generateLog(
                 LoggerLevelEnum::Critical,
-                [
-                    'message' => 'Erreur critique lors de la mise à jour du tag',
-                    'tag_id'  => (string) $tag->getId(),
-                    'error'   => $e->getMessage(),
-                ],
+                ['message' => 'Erreur critique MAJ tag', 'tag_id' => (string) $tag->getId(), 'error' => $e->getMessage()],
                 ['action' => 'tag.update.critical_error']
             );
-
-            return $this->sendJson(['message' => 'Erreur interne lors de la mise à jour du tag.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendJson(['message' => 'Erreur interne.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-    // src/Service/TagService.php
 
     public function deleteTag(Tag $tag): object
     {
         try {
             $this->repository->remove($tag, true);
-
             return $this->sendNoContent();
         } catch (Throwable $e) {
             $this->generateLog(
                 LoggerLevelEnum::Critical,
-                [
-                    'message' => 'Erreur critique lors de la suppression du tag',
-                    'tag_id'  => (string) $tag->getId(),
-                    'error'   => $e->getMessage(),
-                ],
-                ['action' => 'tag.delete.critical_error'] // Remplacer tag.update par tag.delete
+                ['message' => 'Erreur critique suppression tag', 'tag_id' => (string) $tag->getId(), 'error' => $e->getMessage()],
+                ['action' => 'tag.delete.critical_error']
             );
-
-            return $this->sendJson(['message' => 'Erreur interne lors de la suppression du tag.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendJson(['message' => 'Erreur interne.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     private function getAuthenticatedUser(): ?User
     {
         $user = $this->security->getUser();
-
         return $user instanceof User ? $user : null;
     }
 }

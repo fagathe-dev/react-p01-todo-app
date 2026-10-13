@@ -22,7 +22,7 @@ const StyledNav = styled.nav<{ $sticky?: boolean }>`
   justify-content: space-between;
   width: 100%;
   min-height: 56px;
-  padding: ${({ theme }) => `${theme.spacing[2]}${theme.spacing[4]}`};
+  padding: ${({ theme }) => `${theme.spacing[2]} ${theme.spacing[4]}`};
   background-color: ${({ theme }) => theme.colors.background.surface};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.default};
   box-sizing: border-box;

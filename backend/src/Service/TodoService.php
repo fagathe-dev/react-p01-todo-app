@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Dto\Todo\CreateTodoDto;
 use App\Entity\Tag;
 use App\Entity\Todo;
 use App\Entity\TodoFile;
@@ -19,6 +20,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 
@@ -31,6 +33,7 @@ final class TodoService
         private readonly TodoRepository $repository,
         private readonly ValidatorInterface $validator,
         private readonly AttachmentFileService $attachmentFileService,
+        private readonly SerializerInterface $serializer
     ) {}
 
     public function findOneTodo(string $id): ?Todo
@@ -53,8 +56,7 @@ final class TodoService
     }
 
     /**
-     * POST /api/todos
-     * Création minimale : seul le nom est requis.
+     * POST /api/todos (Création rapide via le formulaire Quick Action)
      */
     public function createTodo(Request $request): object
     {
@@ -63,30 +65,31 @@ final class TodoService
             return $this->sendJson(['message' => 'Utilisateur non authentifié.'], Response::HTTP_UNAUTHORIZED);
         }
 
-        $data = json_decode($request->getContent(), true);
-        if (!is_array($data)) {
-            $data = $request->request->all();
+        try {
+            /** @var CreateTodoDto $dto */
+            $dto = $this->serializer->deserialize($request->getContent(), CreateTodoDto::class, 'json');
+        } catch (Throwable) {
+            return $this->sendJson(['message' => 'Format JSON invalide.'], Response::HTTP_BAD_REQUEST);
         }
 
-        $name = trim((string) ($data['name'] ?? ''));
-        if ($name === '') {
-            return $this->sendJson(['message' => 'Le nom de la tâche est obligatoire.'], Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        $todo = new Todo();
-        $todo->setName($name);
-        $todo->setOwner($user);
-        $todo->setIsDone(false);
-
-        $violations = $this->validator->validate($todo);
+        $violations = $this->validator->validate($dto);
         if (count($violations) > 0) {
             return $this->sendViolations($violations);
         }
 
+        $todo = (new Todo())
+            ->setName(trim((string) $dto->name))
+            ->setOwner($user)
+            ->setIsDone(false);
+
         try {
             $this->repository->save($todo, flush: true, isCreation: true);
 
-            return $this->sendJson($todo, Response::HTTP_CREATED, context: ['groups' => ['todo.read']]);
+            return $this->sendJson(
+                $todo,
+                Response::HTTP_CREATED,
+                context: ['groups' => ['todo.read', 'user.read']]
+            );
         } catch (Throwable $e) {
             $this->generateLog(
                 LoggerLevelEnum::Critical,

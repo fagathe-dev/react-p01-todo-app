@@ -15,7 +15,7 @@ const DropdownToggleBtn = styled.button`
   display: inline-flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing[1.5]};
-  padding: ${({ theme }) => `${theme.spacing[1.5]}${theme.spacing[3]}`};
+  padding: ${({ theme }) => `${theme.spacing[1.5]} ${theme.spacing[3]}`};
   background: transparent;
   border: none;
   border-radius: ${({ theme }) => theme.radii.base};
@@ -66,7 +66,7 @@ const ItemBtn = styled.button<{ $active?: boolean }>`
   justify-content: space-between;
   width: 100%;
   gap: ${({ theme }) => theme.spacing[2.5]};
-  padding: ${({ theme }) => `${theme.spacing[2]}${theme.spacing[3]}`};
+  padding: ${({ theme }) => `${theme.spacing[2]} ${theme.spacing[3]}`};
   font-family: inherit;
   font-size: ${({ theme }) => theme.typography.sizes.sm};
   color: ${({ theme }) => theme.colors.text.body};
@@ -169,7 +169,7 @@ export const NavbarDropdownMenu: React.FC<{
   const { isOpen } = useDropdown();
 
   return (
-    <MenuWrapper $isOpen={isOpen}$align={align} role="menu">
+    <MenuWrapper $isOpen={isOpen} $align={align} role="menu">
       {children}
     </MenuWrapper>
   );
