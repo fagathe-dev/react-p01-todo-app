@@ -18,16 +18,16 @@ class TodoComment
     private ?Uuid $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['todo.read'])]
+    #[Groups(['todo.read', 'todo.list'])]
     private ?string $content = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    #[Groups(['todo.read'])]
+    #[Groups(['todo.read', 'todo.list'])]
     private ?User $owner = null;
 
     #[ORM\Column]
-    #[Groups(['todo.read'])]
+    #[Groups(['todo.read', 'todo.list'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]

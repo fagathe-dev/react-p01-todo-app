@@ -33,7 +33,7 @@ class Todo
     private ?DateTimeImmutable $dueDate = null;
 
     #[ORM\Column]
-    #[Groups(['todo.read'])]
+    #[Groups(['todo.read', 'todo.list'])]
     private DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]

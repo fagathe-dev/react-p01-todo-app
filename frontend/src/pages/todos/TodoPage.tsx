@@ -1,6 +1,7 @@
-import { fetchTasks, TaskResponse } from '@/services/task.api';
+// src/pages/todos/TodoPage.tsx
+import { deleteTodo, fetchTodos } from '@/services/todo.api';
+import { Todo } from '@/types/todo.types';
 import { Icon } from '@/ui/components/Base/Icon';
-import { Alert } from '@/ui/components/Feedback/Alert';
 import { Loading } from '@/ui/components/Feedback/Loading';
 import { Text } from '@/ui/components/Typo/Text';
 import { Title } from '@/ui/components/Typo/Title';
@@ -8,52 +9,21 @@ import {
   DueDateCategory,
   isoToDueDateCategory,
 } from '@/utils/dueDate.resolver';
-import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { TaskCard } from './TodoCard';
-import { TaskEditModal } from './TodoEditModal';
-import { TaskQuickCreate } from './TodoQuickCreate';
+import { TodoEditForm, TodoList, TodoQuickCreateForm } from './components';
 
-const HeaderWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: ${({ theme }) => theme.spacing[3]};
-`;
-
-const TagManageLink = styled(Link)`
-  display: inline-flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing[1.5]};
-  padding: ${({ theme }) => `${theme.spacing[1.5]} ${theme.spacing[2.5]}`};
-  font-size: ${({ theme }) => theme.typography.sizes.xs};
-  font-weight: ${({ theme }) => theme.typography.weights.medium};
-  color: ${({ theme }) => theme.colors.text.heading};
-  background-color: ${({ theme }) => theme.colors.background.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border.default};
-  border-radius: ${({ theme }) => theme.radii.base};
-  text-decoration: none;
-  transition: all 0.15s ease;
-
-  &:hover {
-    border-color: ${({ theme }) => theme.colors.primary.base};
-    color: ${({ theme }) => theme.colors.primary.base};
-  }
-`;
-
-const PageWrapper = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 120px);
   gap: ${({ theme }) => theme.spacing[4]};
 `;
 
-const ContentArea = styled.div`
-  flex: 1 0 auto;
+const PageHeader = styled.header`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing[4]};
+  gap: ${({ theme }) => theme.spacing[0.5]};
 `;
 
 const BottomBar = styled.div`
@@ -63,256 +33,161 @@ const BottomBar = styled.div`
   padding-top: ${({ theme }) => theme.spacing[2]};
   background: linear-gradient(
     to top,
-    ${({ theme }) => theme.colors.background.body} 70%,
+    ${({ theme }) => theme.colors.background.body} 75%,
     transparent
   );
 `;
 
-const SectionContainer = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing[2]};
-`;
-
-const SectionHeader = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing[2]};
-  padding-bottom: ${({ theme }) => theme.spacing[1]};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border.default};
-`;
-
-const TaskList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing[2]};
-`;
-
-const EmptyText = styled(Text)`
-  font-style: italic;
-  padding: ${({ theme }) => `${theme.spacing[2]} 0`};
-`;
-
-const DoneSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: ${({ theme }) => theme.spacing[2]};
-`;
-
-const DoneDropdownTrigger = styled.button`
-  display: inline-flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing[1.5]};
-  background: none;
-  border: none;
-  padding: ${({ theme }) => `${theme.spacing[1.5]} 0`};
-  cursor: pointer;
-  font-family: inherit;
-  font-size: ${({ theme }) => theme.typography.sizes.sm};
-  font-weight: ${({ theme }) => theme.typography.weights.medium};
-  color: ${({ theme }) => theme.colors.text.muted};
-  user-select: none;
-  align-self: flex-start;
-  transition: color 0.15s ease;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.text.heading};
-  }
-`;
-
-const ChevronIcon = styled(Icon)<{ $isOpen: boolean }>`
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: ${({ $isOpen }) => ($isOpen ? 'rotate(90deg)' : 'rotate(0deg)')};
-`;
-
-const DoneTaskList = styled.div<{ $isOpen: boolean }>`
-  display: ${({ $isOpen }) => ($isOpen ? 'flex' : 'none')};
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing[2]};
-  margin-top: ${({ theme }) => theme.spacing[2]};
-`;
-
-const SECTION_CONFIG: Array<{
-  key: DueDateCategory;
-  label: string;
-  icon: string;
-}> = [
+// Ordre requis : En retard -> Échéances proches -> Sans échéance (juste avant terminées)
+const SECTIONS: Array<{ key: DueDateCategory; label: string; icon: string }> = [
   { key: 'overdue', label: 'En retard', icon: 'alert-circle' },
-  { key: 'none', label: 'Sans échéance', icon: 'inbox' },
-  { key: 'today', label: "Aujourd'hui", icon: 'calendar-today' },
+  { key: 'today', label: 'Aujourd’hui', icon: 'calendar-today' },
   { key: 'tomorrow', label: 'Demain', icon: 'calendar-arrow-right' },
   { key: 'this_week', label: 'Cette semaine', icon: 'calendar-week' },
   { key: 'later', label: 'Plus tard', icon: 'calendar-clock' },
+  { key: 'none', label: 'Sans échéance', icon: 'inbox' },
 ];
 
-export const TodoPage = () => {
-  const [tasks, setTasks] = useState<TaskResponse[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isDoneOpen, setIsDoneOpen] = useState(false);
-  const [editingTask, setEditingTask] = useState<TaskResponse | null>(null);
+export const TodoPage: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    const loadTasks = async () => {
-      try {
-        setIsLoading(true);
-        const data = await fetchTasks();
-        setTasks(data);
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : 'Impossible de récupérer les tâches'
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadTasks();
+    fetchTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
   }, []);
 
-  const handleTaskCreated = (newTask: TaskResponse) => {
-    setTasks((prev) => [newTask, ...prev]);
+  const handleUpdate = (t: Todo) => {
+    setTodos((prev) => prev.map((item) => (item.id === t.id ? t : item)));
+    if (selectedTodo?.id === t.id) setSelectedTodo(t);
   };
 
-  const handleTaskUpdated = (updatedTask: TaskResponse) => {
-    setTasks((prev) =>
-      prev.map((task) => (task.id === updatedTask.id ? updatedTask : task))
-    );
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Supprimer cette tâche ?')) return;
+    await deleteTodo(id);
+    setTodos((prev) => prev.filter((t) => t.id !== id));
+    if (selectedTodo?.id === id) setSelectedTodo(null);
   };
 
-  const groupedTasks = useMemo(() => {
-    const map: Record<DueDateCategory | 'done', TaskResponse[]> = {
+  // Typage sécurisé contre ts(2532)
+  const grouped = useMemo(() => {
+    const map: Record<DueDateCategory | 'done', Todo[]> = {
       overdue: [],
-      none: [],
       today: [],
       tomorrow: [],
       this_week: [],
       later: [],
+      none: [],
       done: [],
     };
 
-    tasks.forEach((task) => {
-      if (Boolean(task.isDone)) {
-        map.done.push(task);
+    todos.forEach((t) => {
+      if (t.isDone) {
+        map.done.push(t);
       } else {
-        const category = isoToDueDateCategory(task.dueDate);
-        map[category].push(task);
+        const cat = isoToDueDateCategory(t.dueDate);
+        const target = map[cat];
+        if (target) {
+          target.push(t);
+        } else {
+          map.none.push(t);
+        }
       }
     });
 
     return map;
-  }, [tasks]);
+  }, [todos]);
 
-  if (isLoading) {
+  const todayFormatted = new Intl.DateTimeFormat('fr-FR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  }).format(new Date());
+
+  if (loading) {
     return (
-      <div style={{ display: 'grid', placeItems: 'center', height: '200px' }}>
-        <Loading size="lg" label="Chargement des tâches…" />
+      <div style={{ display: 'grid', placeItems: 'center', height: 200 }}>
+        <Loading size="lg" />
       </div>
     );
   }
 
-  if (error) {
-    return <Alert variant="danger">{error}</Alert>;
-  }
+  const doneList = grouped.done ?? [];
 
   return (
-    <PageWrapper>
-      <ContentArea>
-        <header>
-          <HeaderWrapper>
-            <div>
-              <Title as="h2">Ma journée</Title>
-              <Text as="p" color="muted" size="sm">
-                Organisez et planifiez vos priorités
+    <Container>
+      <PageHeader>
+        <Title as="h2">Ma journée</Title>
+        <Text size="xs" color="muted" style={{ textTransform: 'capitalize' }}>
+          {todayFormatted}
+        </Text>
+      </PageHeader>
+
+      {/* Sections actives ordonnées */}
+      {SECTIONS.map(({ key, label, icon }) => {
+        const list = grouped[key] ?? [];
+        if (key !== 'none' && list.length === 0) return null;
+
+        return (
+          <div key={key}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                marginBottom: 8,
+              }}
+            >
+              <Icon name={icon} size={15} color="#888" />
+              <Text size="xs" weight="semibold" color="muted">
+                {label} ({list.length})
               </Text>
             </div>
+            <TodoList
+              todos={list}
+              onTodoUpdated={handleUpdate}
+              onSelectTodo={setSelectedTodo}
+            />
+          </div>
+        );
+      })}
 
-            <TagManageLink to="/tags">
-              <Icon name="tag" size={15} />
-              <span>Gérer les tags</span>
-            </TagManageLink>
-          </HeaderWrapper>
-        </header>
+      {/* Tâches terminées tout en bas */}
+      {doneList.length > 0 && (
+        <div>
+          <Text
+            size="xs"
+            weight="semibold"
+            color="muted"
+            style={{ margin: '14px 0 8px' }}
+          >
+            Terminées ({doneList.length})
+          </Text>
+          <TodoList
+            todos={doneList}
+            onTodoUpdated={handleUpdate}
+            onSelectTodo={setSelectedTodo}
+          />
+        </div>
+      )}
 
-        {SECTION_CONFIG.map(({ key, label, icon }) => {
-          const sectionTasks = groupedTasks[key];
-          if (key !== 'none' && sectionTasks.length === 0) return null;
-
-          return (
-            <SectionContainer key={key}>
-              <SectionHeader>
-                <Icon name={icon} size={18} />
-                <Text weight="semibold" size="sm">
-                  {label} ({sectionTasks.length})
-                </Text>
-              </SectionHeader>
-
-              {sectionTasks.length === 0 ? (
-                <EmptyText size="sm" color="muted">
-                  Aucune tâche dans cette section.
-                </EmptyText>
-              ) : (
-                <TaskList>
-                  {sectionTasks.map((task) => (
-                    <TaskCard
-                      key={task.id}
-                      task={task}
-                      onTaskUpdated={handleTaskUpdated}
-                      onEdit={(taskToEdit) => setEditingTask(taskToEdit)}
-                    />
-                  ))}
-                </TaskList>
-              )}
-            </SectionContainer>
-          );
-        })}
-
-        {groupedTasks.done.length > 0 && (
-          <DoneSection>
-            <DoneDropdownTrigger
-              type="button"
-              onClick={() => setIsDoneOpen((prev) => !prev)}
-              aria-expanded={isDoneOpen}
-            >
-              <ChevronIcon
-                name="chevron-right"
-                size={16}
-                $isOpen={isDoneOpen}
-              />
-              <span>Terminées ({groupedTasks.done.length})</span>
-            </DoneDropdownTrigger>
-
-            <DoneTaskList $isOpen={isDoneOpen}>
-              {groupedTasks.done.map((task) => (
-                <TaskCard
-                  key={task.id}
-                  task={task}
-                  onTaskUpdated={handleTaskUpdated}
-                  onEdit={(taskToEdit) => setEditingTask(taskToEdit)}
-                />
-              ))}
-            </DoneTaskList>
-          </DoneSection>
-        )}
-      </ContentArea>
-
-      {editingTask && (
-        <TaskEditModal
-          task={editingTask}
-          isOpen={Boolean(editingTask)}
-          onClose={() => setEditingTask(null)}
-          onTaskUpdated={handleTaskUpdated}
+      {/* Volet latéral d'édition au clic */}
+      {selectedTodo && (
+        <TodoEditForm
+          todo={selectedTodo}
+          onClose={() => setSelectedTodo(null)}
+          onUpdated={handleUpdate}
+          onDelete={handleDelete}
         />
       )}
 
       <BottomBar>
-        <TaskQuickCreate
-          onTaskCreated={handleTaskCreated}
-          defaultDueDate={null}
+        <TodoQuickCreateForm
+          onCreated={(t) => setTodos((prev) => [t, ...prev])}
         />
       </BottomBar>
-    </PageWrapper>
+    </Container>
   );
 };

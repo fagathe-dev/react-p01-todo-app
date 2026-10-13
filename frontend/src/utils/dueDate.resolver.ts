@@ -1,5 +1,5 @@
 // src/utils/dueDate.resolver.ts
-import { DueDateEnum } from '@/types/app.types';
+import { DueDateEnum } from '@/types/todo.types';
 import { DateCalculator, ensureDate } from 'core-ts';
 
 export type DueDateCategory = DueDateEnum | 'overdue' | 'none';

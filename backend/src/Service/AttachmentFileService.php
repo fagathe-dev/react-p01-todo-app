@@ -21,6 +21,7 @@ use Fagathe\CorePhp\Uploader\FileUploadException;
 use Fagathe\CorePhp\Uploader\UploaderService;
 use Fagathe\CorePhp\Uploader\UploaderValidationService;
 use InvalidArgumentException;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
 
@@ -34,7 +35,8 @@ final class AttachmentFileService
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly UploaderService $uploader,
-        private readonly ?string $defaultUri = null,
+        private readonly ?string $defaultUri,
+        private readonly Security $security,
     ) {}
 
     /**

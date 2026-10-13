@@ -1,8 +1,8 @@
 import { Tag } from './tag.types';
 
-export type DueDateEnum = 'today' | 'tomorrow' | 'this_week' | 'later';
+type DueDateEnum = 'today' | 'tomorrow' | 'this_week' | 'later';
 
-export interface TodoFile {
+interface TodoFile {
   id: string;
   originalName: string;
   niceName?: string | null;
@@ -16,25 +16,48 @@ export interface TodoFile {
   isPinned: boolean;
 }
 
-export interface Todo {
+export interface TodoComment {
+  id: string;
+  content: string;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  owner?: {
+    id: string;
+    username: string;
+    avatar?: string | null;
+  } | null;
+}
+
+interface Todo {
   id: string;
   name: string;
   isDone: boolean;
   dueDate: string | null;
   description?: string | null;
-  createdAt: string;
+  createdAt?: string;
   updatedAt?: string | null;
   tag: Tag | null;
-  files?: TodoFile[]; // Inclus si le groupe 'todo.read' est utilisé
+  files?: TodoFile[];
+  comments?: TodoComment[];
 }
 
-export interface CreateTodoPayload {
+interface CreateTodoPayload {
   name: string;
-  description?: string | null;
-  dueDate?: string | null;
-  tag?: string | null; // L'identifiant (UUID) du tag
 }
 
-export type UpdateTodoPayload = Partial<CreateTodoPayload> & {
+interface UpdateTodoPayload {
+  name?: string;
+  description?: string | null;
   isDone?: boolean;
+  dueDate?: string | null;
+  tag?: string | null;
+}
+
+export type {
+  CreateTodoPayload,
+  DueDateEnum,
+  Todo,
+  TodoComment,
+  TodoFile,
+  UpdateTodoPayload,
 };

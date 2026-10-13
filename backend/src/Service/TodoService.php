@@ -2,13 +2,16 @@
 
 namespace App\Service;
 
+use App\Dto\Todo\CreateTodoCommentDto;
 use App\Dto\Todo\CreateTodoDto;
 use App\Entity\Tag;
 use App\Entity\Todo;
+use App\Entity\TodoComment;
 use App\Entity\TodoFile;
 use App\Entity\User;
-use App\Service\AttachmentFileService;
+use App\Repository\TodoCommentRepository;
 use App\Repository\TodoRepository;
+use App\Service\AttachmentFileService;
 use DateTimeImmutable;
 use DateTimeZone;
 use Fagathe\CorePhp\Enum\LoggerLevelEnum;
@@ -31,6 +34,7 @@ final class TodoService
     public function __construct(
         private readonly Security $security,
         private readonly TodoRepository $repository,
+        private readonly TodoCommentRepository $commentRepository,
         private readonly ValidatorInterface $validator,
         private readonly AttachmentFileService $attachmentFileService,
         private readonly SerializerInterface $serializer
@@ -41,10 +45,6 @@ final class TodoService
         return $this->repository->findOneBy(['id' => $id]);
     }
 
-    /**
-     * GET /api/todos
-     * Retourne la liste. Le groupe 'todo.list' sérialise files sous forme [[], []]
-     */
     public function listTodos(): object
     {
         $user = $this->getAuthenticatedUser();
@@ -52,12 +52,13 @@ final class TodoService
             return $this->sendJson(['message' => 'Utilisateur non authentifié.'], Response::HTTP_UNAUTHORIZED);
         }
 
-        return $this->sendJson($user->getTodos(), Response::HTTP_OK, context: ['groups' => ['todo.list']]);
+        return $this->sendJson(
+            $user->getTodos(),
+            Response::HTTP_OK,
+            context: ['groups' => ['todo.list', 'user.read']]
+        );
     }
 
-    /**
-     * POST /api/todos (Création rapide via le formulaire Quick Action)
-     */
     public function createTodo(Request $request): object
     {
         $user = $this->getAuthenticatedUser();
@@ -105,10 +106,6 @@ final class TodoService
         }
     }
 
-    /**
-     * POST (ou PUT) /api/todos/{id}
-     * Modification de la tâche et gestion des uploads de fichiers
-     */
     public function updateTodo(Todo $todo, Request $request): object
     {
         $user = $this->getAuthenticatedUser();
@@ -116,13 +113,11 @@ final class TodoService
             return $this->sendJson(['message' => 'Utilisateur non authentifié.'], Response::HTTP_UNAUTHORIZED);
         }
 
-        // Supporte FormData ($request->request) et JSON ($request->getContent())
         $data = $request->request->all();
         if (empty($data)) {
             $data = json_decode($request->getContent(), true) ?? [];
         }
 
-        // 1. Mise à jour des champs textuels
         if (array_key_exists('name', $data) && trim((string) $data['name']) !== '') {
             $todo->setName(trim((string) $data['name']));
         }
@@ -160,7 +155,6 @@ final class TodoService
             return $this->sendViolations($violations);
         }
 
-        // 2. Traitement des fichiers uploadés (AJAX FormData)
         $files = $this->extractUploadedFiles($request);
         try {
             foreach ($files as $file) {
@@ -192,7 +186,6 @@ final class TodoService
     public function deleteTodo(Todo $todo): object
     {
         try {
-            // Nettoyage des fichiers physiques avant suppression en base
             $this->attachmentFileService->deleteByTarget($todo);
             $this->repository->remove($todo, true);
 
@@ -212,9 +205,6 @@ final class TodoService
         }
     }
 
-    /**
-     * Supprime une pièce jointe spécifique attachée à un Todo
-     */
     public function deleteTodoFile(Todo $todo, string $fileId): object
     {
         $file = $todo->getFiles()->findFirst(
@@ -231,10 +221,99 @@ final class TodoService
     }
 
     /**
-     * Extrait tous les UploadedFile du formulaire (qu'ils soient nommés 'file', 'files', etc.)
-     *
-     * @return array<UploadedFile>
+     * POST /api/todos/{id}/comments
      */
+    public function addComment(Todo $todo, Request $request): object
+    {
+        $user = $this->getAuthenticatedUser();
+        if (!$user) {
+            return $this->sendJson(['message' => 'Utilisateur non authentifié.'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        try {
+            /** @var CreateTodoCommentDto $dto */
+            $dto = $this->serializer->deserialize($request->getContent(), CreateTodoCommentDto::class, 'json');
+        } catch (Throwable) {
+            return $this->sendJson(['message' => 'Format JSON invalide.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $violations = $this->validator->validate($dto);
+        if (count($violations) > 0) {
+            return $this->sendViolations($violations);
+        }
+
+        $comment = (new TodoComment())
+            ->setContent(trim((string) $dto->content))
+            ->setOwner($user)
+            ->setTodo($todo);
+
+        try {
+            $this->commentRepository->save($comment, flush: true, isCreation: true);
+
+            return $this->sendJson(
+                $comment,
+                Response::HTTP_CREATED,
+                context: ['groups' => ['todo.read', 'user.read']]
+            );
+        } catch (Throwable $e) {
+            $this->generateLog(
+                LoggerLevelEnum::Critical,
+                [
+                    'message' => 'Erreur lors de l\'ajout du commentaire',
+                    'todo_id' => (string) $todo->getId(),
+                    'error'   => $e->getMessage(),
+                ],
+                ['action' => 'todo.comment.create_error']
+            );
+
+            return $this->sendJson(['message' => 'Impossible d\'ajouter le commentaire.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * DELETE /api/todos/{id}/comments/{commentId}
+     */
+    public function deleteComment(Todo $todo, string $commentId): object
+    {
+        $user = $this->getAuthenticatedUser();
+        if (!$user) {
+            return $this->sendJson(['message' => 'Utilisateur non authentifié.'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $comment = $todo->getComments()->findFirst(
+            fn(int $key, TodoComment $c) => (string) $c->getId() === $commentId
+        );
+
+        if (!$comment) {
+            return $this->sendJson(['message' => 'Commentaire introuvable sur cette tâche.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $isAuthor = $comment->getOwner() && (string) $comment->getOwner()->getId() === (string) $user->getId();
+        $isTodoOwner = (string) $todo->getOwner()->getId() === (string) $user->getId();
+
+        if (!$isAuthor && !$isTodoOwner) {
+            return $this->sendJson(['message' => 'Action non autorisée.'], Response::HTTP_FORBIDDEN);
+        }
+
+        try {
+            $this->commentRepository->remove($comment, flush: true);
+
+            return $this->sendNoContent();
+        } catch (Throwable $e) {
+            $this->generateLog(
+                LoggerLevelEnum::Critical,
+                [
+                    'message'    => 'Erreur lors de la suppression du commentaire',
+                    'comment_id' => $commentId,
+                    'error'      => $e->getMessage(),
+                ],
+                ['action' => 'todo.comment.delete_error']
+            );
+
+            return $this->sendJson(['message' => 'Impossible de supprimer le commentaire.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     private function extractUploadedFiles(Request $request): array
     {
         $extracted = [];
