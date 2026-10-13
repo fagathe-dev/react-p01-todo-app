@@ -6,14 +6,11 @@ import { Container } from '@/ui/components/Grid';
 import {
   Navbar,
   NavbarBrand,
-  NavbarCollapse,
   NavbarDropdown,
   NavbarDropdownDivider,
   NavbarDropdownItem,
   NavbarDropdownMenu,
   NavbarDropdownToggle,
-  NavbarItem,
-  NavbarNav,
   Sidebar,
   SidebarFooter,
   SidebarHeader,
@@ -153,8 +150,7 @@ export const AppLayout: React.FC = () => {
   const location = useLocation();
 
   const isCurrentPath = (path: string) =>
-    location.pathname === path ||
-    (path !== '/' && location.pathname.startsWith(path));
+    location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
 
   return (
     <SidebarProvider breakpoint="md">
@@ -171,9 +167,6 @@ export const AppLayout: React.FC = () => {
                 width={32}
                 alt="Logo de l'application To-Do App"
               />
-              <Text weight="semibold" size="base" color="heading">
-                To-Do App
-              </Text>
             </BrandLink>
           </SidebarHeader>
 
@@ -217,16 +210,12 @@ export const AppLayout: React.FC = () => {
 
           <SidebarFooter>
             <UserProfilePreview>
-              <Avatar
-                name={user?.username ?? 'Utilisateur'}
-                src={user?.avatar ?? undefined}
-                size="sm"
-              />
+              <Avatar name={user?.username ?? 'Utilisateur'} src={user?.avatar ?? undefined} size="sm" />
               <UserMeta>
                 <Text weight="semibold" size="xs" color="tertiary">
                   {user?.username ?? 'Utilisateur'}
                 </Text>
-                <Text size="xs" color="muted" truncate>
+                <Text size="xs" color="muted">
                   {user?.email ?? ''}
                 </Text>
               </UserMeta>
@@ -248,65 +237,49 @@ export const AppLayout: React.FC = () => {
             >
               <SidebarToggle />
               <NavbarBrand>
-                <Text
-                  weight="medium"
-                  size="sm"
-                  color="tertiary"
-                  style={{ paddingInline: 10 }}
-                >
+                <Text weight="medium" size="sm" color="tertiary" style={{ paddingInline: 10 }}>
                   Mon Espace
                 </Text>
               </NavbarBrand>
             </div>
 
-            <NavbarCollapse>
-              <NavbarNav as="ul" style={{ marginLeft: 'auto' }}>
-                <NavbarItem as="li">
-                  <NavbarDropdown>
-                    <AvatarToggle aria-label="Menu du compte utilisateur">
-                      <Avatar
-                        name={user?.username ?? 'Utilisateur'}
-                        src={user?.avatar ?? undefined}
-                        size="base"
-                      />
-                    </AvatarToggle>
+            {/* L'avatar est placé directement ici : visible sur toutes les résolutions */}
+            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
+              <NavbarDropdown>
+                <AvatarToggle aria-label="Menu du compte utilisateur">
+                  <Avatar name={user?.username ?? 'Utilisateur'} src={user?.avatar ?? undefined} size="base" />
+                </AvatarToggle>
 
-                    <NavbarDropdownMenu align="right">
-                      <NavbarDropdownItem as={Link} to="/profile">
-                        <MenuActionContent>
-                          <span>Mon profil</span>
-                          <Icon name="account" size={18} />
-                        </MenuActionContent>
-                      </NavbarDropdownItem>
+                <NavbarDropdownMenu align="right">
+                  <NavbarDropdownItem as={Link} to="/profile">
+                    <MenuActionContent>
+                      <span>Mon profil</span>
+                      <Icon name="account" size={18} />
+                    </MenuActionContent>
+                  </NavbarDropdownItem>
 
-                      <NavbarDropdownDivider />
+                  <NavbarDropdownDivider />
 
-                      <NavbarDropdownItem onClick={toggleTheme}>
-                        <MenuActionContent>
-                          <span>{isDark ? 'Mode clair' : 'Mode sombre'}</span>
-                          <Icon
-                            name={isDark ? 'weather-sunny' : 'weather-night'}
-                            size={18}
-                          />
-                        </MenuActionContent>
-                      </NavbarDropdownItem>
+                  <NavbarDropdownItem onClick={toggleTheme}>
+                    <MenuActionContent>
+                      <span>{isDark ? 'Mode clair' : 'Mode sombre'}</span>
+                      <Icon name={isDark ? 'weather-sunny' : 'weather-night'} size={18} />
+                    </MenuActionContent>
+                  </NavbarDropdownItem>
 
-                      <NavbarDropdownDivider />
+                  <NavbarDropdownDivider />
 
-                      <NavbarDropdownItem as={Link} to="/logout">
-                        <MenuActionContent>
-                          <span>Se déconnecter</span>
-                          <Icon name="logout" size={18} />
-                        </MenuActionContent>
-                      </NavbarDropdownItem>
-                    </NavbarDropdownMenu>
-                  </NavbarDropdown>
-                </NavbarItem>
-              </NavbarNav>
-            </NavbarCollapse>
+                  <NavbarDropdownItem as={Link} to="/logout">
+                    <MenuActionContent>
+                      <span>Se déconnecter</span>
+                      <Icon name="logout" size={18} />
+                    </MenuActionContent>
+                  </NavbarDropdownItem>
+                </NavbarDropdownMenu>
+              </NavbarDropdown>
+            </div>
           </Navbar>
 
-          {/* Seul ce conteneur défile désormais */}
           <ScrollArea>
             <MainContent>
               <Outlet />

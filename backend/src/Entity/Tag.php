@@ -21,12 +21,12 @@ class Tag
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
-    #[Groups(['tag.list', 'tag.read', 'todo.read', 'todo.list'])]
+    #[Groups(['tag.list', 'tag.read', 'todo.read', 'todo.list', 'note.list', 'note.read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 50, nullable: true)]
     #[Assert\NotBlank(message: 'Le nom est obligatoire !')]
-    #[Groups(['tag.list', 'tag.read', 'todo.read', 'todo.list'])]
+    #[Groups(['tag.list', 'tag.read', 'todo.read', 'todo.list', 'note.list', 'note.read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 20, nullable: true, enumType: ColorEnum::class)]

@@ -8,19 +8,23 @@ use App\Repository\NoteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: NoteRepository::class)]
 #[ORM\Index(name: 'idx_ft_note', columns: ['title', 'content'], flags: ['fulltext'])]
 class Note extends AbstractTextEntry
 {
     #[ORM\Column(length: 160, nullable: true)]
+    #[Groups(['note.list', 'note.read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 30, enumType: StateEnum::class)]
+    #[Groups(['note.list', 'note.read'])]
     private StateEnum|string|null $state = StateEnum::Open;
 
     #[ORM\ManyToOne(inversedBy: 'notes')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['note.list'])]
     private ?User $owner = null;
 
     /**
@@ -30,15 +34,18 @@ class Note extends AbstractTextEntry
     private ?Tag $tag = null;
 
     #[ORM\Column(length: 30, nullable: true, enumType: ColorEnum::class)]
+    #[Groups(['note.list', 'note.read'])]
     private ColorEnum|string|null $color = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['note.list', 'note.read'])]
     private ?\DateTimeImmutable $deleted_at = null;
 
     /**
      * @var Collection<int, NoteFile>
      */
     #[ORM\OneToMany(targetEntity: NoteFile::class, mappedBy: 'note', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[Groups(['note.list', 'note.read'])]
     private Collection $files;
 
     public function __construct()

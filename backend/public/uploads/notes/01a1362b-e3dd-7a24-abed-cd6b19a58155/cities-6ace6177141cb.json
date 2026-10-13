@@ -1,0 +1,602 @@
+[
+  {
+    "name": "Agence Paris Bastille",
+    "phone": "01 43 55 00 11",
+    "headquarters": {
+      "name": "Paris 11e",
+      "zip": "75011",
+      "dep": "75",
+      "slug": "paris-11"
+    },
+    "sector": [
+      {
+        "name": "Paris 3e",
+        "zip": "75003",
+        "dep": "75",
+        "slug": "paris-3"
+      },
+      {
+        "name": "Paris 4e",
+        "zip": "75004",
+        "dep": "75",
+        "slug": "paris-4"
+      },
+      {
+        "name": "Paris 10e",
+        "zip": "75010",
+        "dep": "75",
+        "slug": "paris-10"
+      },
+      {
+        "name": "Paris 12e",
+        "zip": "75012",
+        "dep": "75",
+        "slug": "paris-12"
+      },
+      {
+        "name": "Paris 19e",
+        "zip": "75019",
+        "dep": "75",
+        "slug": "paris-19"
+      },
+      {
+        "name": "Paris 20e",
+        "zip": "75020",
+        "dep": "75",
+        "slug": "paris-20"
+      },
+      {
+        "name": "Saint-Mandé",
+        "zip": "94160",
+        "dep": "94",
+        "slug": "saint-mande"
+      },
+      {
+        "name": "Bagnolet",
+        "zip": "93170",
+        "dep": "93",
+        "slug": "bagnolet"
+      }
+    ]
+  },
+  {
+    "name": "Agence Paris Rive Gauche",
+    "phone": "01 45 77 00 15",
+    "headquarters": {
+      "name": "Paris 15e",
+      "zip": "75015",
+      "dep": "75",
+      "slug": "paris-15"
+    },
+    "sector": [
+      {
+        "name": "Paris 7e",
+        "zip": "75007",
+        "dep": "75",
+        "slug": "paris-7"
+      },
+      {
+        "name": "Paris 14e",
+        "zip": "75014",
+        "dep": "75",
+        "slug": "paris-14"
+      },
+      {
+        "name": "Paris 16e",
+        "zip": "75016",
+        "dep": "75",
+        "slug": "paris-16"
+      },
+      {
+        "name": "Vanves",
+        "zip": "92170",
+        "dep": "92",
+        "slug": "vanves"
+      },
+      {
+        "name": "Malakoff",
+        "zip": "92240",
+        "dep": "92",
+        "slug": "malakoff"
+      },
+      {
+        "name": "Issy-les-Moulineaux",
+        "zip": "92130",
+        "dep": "92",
+        "slug": "issy-les-moulineaux"
+      },
+      {
+        "name": "Montrouge",
+        "zip": "92120",
+        "dep": "92",
+        "slug": "montrouge"
+      },
+      {
+        "name": "Boulogne-Billancourt",
+        "zip": "92100",
+        "dep": "92",
+        "slug": "boulogne-billancourt"
+      }
+    ]
+  },
+  {
+    "name": "Agence Boulogne Ouest",
+    "phone": "01 46 05 00 92",
+    "headquarters": {
+      "name": "Boulogne-Billancourt",
+      "zip": "92100",
+      "dep": "92",
+      "slug": "boulogne-billancourt"
+    },
+    "sector": [
+      {
+        "name": "Issy-les-Moulineaux",
+        "zip": "92130",
+        "dep": "92",
+        "slug": "issy-les-moulineaux"
+      },
+      {
+        "name": "Sèvres",
+        "zip": "92310",
+        "dep": "92",
+        "slug": "sevres"
+      },
+      {
+        "name": "Saint-Cloud",
+        "zip": "92210",
+        "dep": "92",
+        "slug": "saint-cloud"
+      },
+      {
+        "name": "Meudon",
+        "zip": "92190",
+        "dep": "92",
+        "slug": "meudon"
+      },
+      {
+        "name": "Chaville",
+        "zip": "92370",
+        "dep": "92",
+        "slug": "chaville"
+      },
+      {
+        "name": "Ville-d'Avray",
+        "zip": "92410",
+        "dep": "92",
+        "slug": "ville-davray"
+      },
+      {
+        "name": "Clamart",
+        "zip": "92140",
+        "dep": "92",
+        "slug": "clamart"
+      },
+      {
+        "name": "Garches",
+        "zip": "92380",
+        "dep": "92",
+        "slug": "garches"
+      }
+    ]
+  },
+  {
+    "name": "Agence Rueil & Collines",
+    "phone": "01 47 49 00 92",
+    "headquarters": {
+      "name": "Rueil-Malmaison",
+      "zip": "92500",
+      "dep": "92",
+      "slug": "rueil-malmaison"
+    },
+    "sector": [
+      {
+        "name": "Nanterre",
+        "zip": "92000",
+        "dep": "92",
+        "slug": "nanterre"
+      },
+      {
+        "name": "Suresnes",
+        "zip": "92150",
+        "dep": "92",
+        "slug": "suresnes"
+      },
+      {
+        "name": "Puteaux",
+        "zip": "92800",
+        "dep": "92",
+        "slug": "puteaux"
+      },
+      {
+        "name": "Chatou",
+        "zip": "78400",
+        "dep": "78",
+        "slug": "chatou"
+      },
+      {
+        "name": "Croissy-sur-Seine",
+        "zip": "78290",
+        "dep": "78",
+        "slug": "croissy-sur-seine"
+      },
+      {
+        "name": "Bougival",
+        "zip": "78380",
+        "dep": "78",
+        "slug": "bougival"
+      },
+      {
+        "name": "La Celle-Saint-Cloud",
+        "zip": "78170",
+        "dep": "78",
+        "slug": "la-celle-saint-cloud"
+      },
+      {
+        "name": "Vaucresson",
+        "zip": "92420",
+        "dep": "92",
+        "slug": "vaucresson"
+      }
+    ]
+  },
+  {
+    "name": "Agence Montreuil Éco",
+    "phone": "01 48 58 00 93",
+    "headquarters": {
+      "name": "Montreuil",
+      "zip": "93100",
+      "dep": "93",
+      "slug": "montreuil"
+    },
+    "sector": [
+      {
+        "name": "Bagnolet",
+        "zip": "93170",
+        "dep": "93",
+        "slug": "bagnolet"
+      },
+      {
+        "name": "Romainville",
+        "zip": "93230",
+        "dep": "93",
+        "slug": "romainville"
+      },
+      {
+        "name": "Les Lilas",
+        "zip": "93260",
+        "dep": "93",
+        "slug": "les-lilas"
+      },
+      {
+        "name": "Noisy-le-Sec",
+        "zip": "93130",
+        "dep": "93",
+        "slug": "noisy-le-sec"
+      },
+      {
+        "name": "Rosny-sous-Bois",
+        "zip": "93110",
+        "dep": "93",
+        "slug": "rosny-sous-bois"
+      },
+      {
+        "name": "Fontenay-sous-Bois",
+        "zip": "94120",
+        "dep": "94",
+        "slug": "fontenay-sous-bois"
+      },
+      {
+        "name": "Vincennes",
+        "zip": "94300",
+        "dep": "94",
+        "slug": "vincennes"
+      },
+      {
+        "name": "Pantin",
+        "zip": "93500",
+        "dep": "93",
+        "slug": "pantin"
+      }
+    ]
+  },
+  {
+    "name": "Agence Plaine Grand Paris",
+    "phone": "01 48 20 00 93",
+    "headquarters": {
+      "name": "Saint-Denis",
+      "zip": "93200",
+      "dep": "93",
+      "slug": "saint-denis"
+    },
+    "sector": [
+      {
+        "name": "Saint-Ouen-sur-Seine",
+        "zip": "93400",
+        "dep": "93",
+        "slug": "saint-ouen-sur-seine"
+      },
+      {
+        "name": "Aubervilliers",
+        "zip": "93300",
+        "dep": "93",
+        "slug": "aubervilliers"
+      },
+      {
+        "name": "Épinay-sur-Seine",
+        "zip": "93800",
+        "dep": "93",
+        "slug": "epinay-sur-seine"
+      },
+      {
+        "name": "Villetaneuse",
+        "zip": "93430",
+        "dep": "93",
+        "slug": "villetaneuse"
+      },
+      {
+        "name": "Pierrefitte-sur-Seine",
+        "zip": "93380",
+        "dep": "93",
+        "slug": "pierrefitte-sur-seine"
+      },
+      {
+        "name": "Stains",
+        "zip": "93240",
+        "dep": "93",
+        "slug": "stains"
+      },
+      {
+        "name": "La Courneuve",
+        "zip": "93120",
+        "dep": "93",
+        "slug": "la-courneuve"
+      },
+      {
+        "name": "L'Île-Saint-Denis",
+        "zip": "93450",
+        "dep": "93",
+        "slug": "l-ile-saint-denis"
+      }
+    ]
+  },
+  {
+    "name": "Agence Vincennes Bois",
+    "phone": "01 43 28 00 94",
+    "headquarters": {
+      "name": "Vincennes",
+      "zip": "94300",
+      "dep": "94",
+      "slug": "vincennes"
+    },
+    "sector": [
+      {
+        "name": "Saint-Mandé",
+        "zip": "94160",
+        "dep": "94",
+        "slug": "saint-mande"
+      },
+      {
+        "name": "Fontenay-sous-Bois",
+        "zip": "94120",
+        "dep": "94",
+        "slug": "fontenay-sous-bois"
+      },
+      {
+        "name": "Nogent-sur-Marne",
+        "zip": "94130",
+        "dep": "94",
+        "slug": "nogent-sur-marne"
+      },
+      {
+        "name": "Charenton-le-Pont",
+        "zip": "94220",
+        "dep": "94",
+        "slug": "charenton-le-pont"
+      },
+      {
+        "name": "Saint-Maurice",
+        "zip": "94410",
+        "dep": "94",
+        "slug": "saint-maurice"
+      },
+      {
+        "name": "Joinville-le-Pont",
+        "zip": "94340",
+        "dep": "94",
+        "slug": "joinville-le-pont"
+      },
+      {
+        "name": "Maisons-Alfort",
+        "zip": "94700",
+        "dep": "94",
+        "slug": "maisons-alfort"
+      },
+      {
+        "name": "Le Perreux-sur-Marne",
+        "zip": "94170",
+        "dep": "94",
+        "slug": "le-perreux-sur-marne"
+      }
+    ]
+  },
+  {
+    "name": "Agence Bords de Marne",
+    "phone": "01 48 83 00 94",
+    "headquarters": {
+      "name": "Saint-Maur-des-Fossés",
+      "zip": "94100",
+      "dep": "94",
+      "slug": "saint-maur-des-fosses"
+    },
+    "sector": [
+      {
+        "name": "Champigny-sur-Marne",
+        "zip": "94500",
+        "dep": "94",
+        "slug": "champigny-sur-marne"
+      },
+      {
+        "name": "Chennevières-sur-Marne",
+        "zip": "94430",
+        "dep": "94",
+        "slug": "chennevieres-sur-marne"
+      },
+      {
+        "name": "Ormesson-sur-Marne",
+        "zip": "94490",
+        "dep": "94",
+        "slug": "ormesson-sur-marne"
+      },
+      {
+        "name": "Sucy-en-Brie",
+        "zip": "94370",
+        "dep": "94",
+        "slug": "sucy-en-brie"
+      },
+      {
+        "name": "Bonneuil-sur-Marne",
+        "zip": "94380",
+        "dep": "94",
+        "slug": "bonneuil-sur-marne"
+      },
+      {
+        "name": "Créteil",
+        "zip": "94000",
+        "dep": "94",
+        "slug": "creteil"
+      },
+      {
+        "name": "Joinville-le-Pont",
+        "zip": "94340",
+        "dep": "94",
+        "slug": "joinville-le-pont"
+      },
+      {
+        "name": "Nogent-sur-Marne",
+        "zip": "94130",
+        "dep": "94",
+        "slug": "nogent-sur-marne"
+      }
+    ]
+  },
+  {
+    "name": "Agence Versailles Royale",
+    "phone": "01 39 50 00 78",
+    "headquarters": {
+      "name": "Versailles",
+      "zip": "78000",
+      "dep": "78",
+      "slug": "versailles"
+    },
+    "sector": [
+      {
+        "name": "Le Chesnay-Rocquencourt",
+        "zip": "78150",
+        "dep": "78",
+        "slug": "le-chesnay-rocquencourt"
+      },
+      {
+        "name": "Viroflay",
+        "zip": "78220",
+        "dep": "78",
+        "slug": "viroflay"
+      },
+      {
+        "name": "Vélizy-Villacoublay",
+        "zip": "78140",
+        "dep": "78",
+        "slug": "velizy-villacoublay"
+      },
+      {
+        "name": "Buc",
+        "zip": "78530",
+        "dep": "78",
+        "slug": "buc"
+      },
+      {
+        "name": "Guyancourt",
+        "zip": "78280",
+        "dep": "78",
+        "slug": "guyancourt"
+      },
+      {
+        "name": "Saint-Cyr-l'École",
+        "zip": "78210",
+        "dep": "78",
+        "slug": "saint-cyr-l-ecole"
+      },
+      {
+        "name": "Bailly",
+        "zip": "78870",
+        "dep": "78",
+        "slug": "bailly"
+      },
+      {
+        "name": "Jouy-en-Josas",
+        "zip": "78350",
+        "dep": "78",
+        "slug": "jouy-en-josas"
+      }
+    ]
+  },
+  {
+    "name": "Agence Val d'Europe",
+    "phone": "01 60 43 00 77",
+    "headquarters": {
+      "name": "Serris",
+      "zip": "77700",
+      "dep": "77",
+      "slug": "serris"
+    },
+    "sector": [
+      {
+        "name": "Chessy",
+        "zip": "77700",
+        "dep": "77",
+        "slug": "chessy"
+      },
+      {
+        "name": "Bailly-Romainvilliers",
+        "zip": "77700",
+        "dep": "77",
+        "slug": "bailly-romainvilliers"
+      },
+      {
+        "name": "Magny-le-Hongre",
+        "zip": "77700",
+        "dep": "77",
+        "slug": "magny-le-hongre"
+      },
+      {
+        "name": "Montévrain",
+        "zip": "77144",
+        "dep": "77",
+        "slug": "montevrain"
+      },
+      {
+        "name": "Lagny-sur-Marne",
+        "zip": "77400",
+        "dep": "77",
+        "slug": "lagny-sur-marne"
+      },
+      {
+        "name": "Bussy-Saint-Georges",
+        "zip": "77600",
+        "dep": "77",
+        "slug": "bussy-saint-georges"
+      },
+      {
+        "name": "Torcy",
+        "zip": "77200",
+        "dep": "77",
+        "slug": "torcy"
+      },
+      {
+        "name": "Esbly",
+        "zip": "77450",
+        "dep": "77",
+        "slug": "esbly"
+      }
+    ]
+  }
+]

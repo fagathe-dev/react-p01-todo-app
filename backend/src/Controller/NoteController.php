@@ -19,9 +19,9 @@ final class NoteController extends AbstractController
     public function __construct(private readonly NoteService $service) {}
 
     #[Route('', name: 'list', methods: ['GET'])]
-    public function list(): JsonResponse
+    public function list(Request $request): JsonResponse
     {
-        $res = $this->service->listNotes();
+        $res = $this->service->listNotes($request);
         return $this->json($res->data, $res->status, $res->headers, $res->context);
     }
 
@@ -41,7 +41,7 @@ final class NoteController extends AbstractController
         }
 
         $this->denyAccessUnlessGranted(OwnerVoter::VIEW, $note);
-        $res = $this->service->sendJson($note, context: ['groups' => ['note.read', 'file.read']]);
+        $res = $this->service->sendJson($note, context: ['groups' => ['note.read', 'tag.read', 'file.read']]);
 
         return $this->json($res->data, $res->status, $res->headers, $res->context);
     }
@@ -51,6 +51,20 @@ final class NoteController extends AbstractController
     {
         $this->denyAccessUnlessGranted(OwnerVoter::EDIT, $note);
         $res = $this->service->updateNote($note, $request);
+
+        return $this->json($res->data, $res->status, $res->headers, $res->context);
+    }
+
+    #[Route('/{id}/restore', name: 'restore', methods: ['POST', 'PATCH'])]
+    public function restore(string $id): JsonResponse
+    {
+        $note = $this->service->findOneNote($id);
+        if (!$note instanceof Note) {
+            return $this->json(['message' => 'Note introuvable.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $this->denyAccessUnlessGranted(OwnerVoter::EDIT, $note);
+        $res = $this->service->restoreNote($note);
 
         return $this->json($res->data, $res->status, $res->headers, $res->context);
     }
@@ -76,6 +90,13 @@ final class NoteController extends AbstractController
         $this->denyAccessUnlessGranted(OwnerVoter::EDIT, $note);
         $res = $this->service->deleteNoteFile($note, $fileId);
 
+        return $this->json($res->data, $res->status, $res->headers, $res->context);
+    }
+
+    #[Route('/trash/empty', name: 'empty_trash', methods: ['DELETE'])]
+    public function emptyTrash(): JsonResponse
+    {
+        $res = $this->service->emptyTrash();
         return $this->json($res->data, $res->status, $res->headers, $res->context);
     }
 }

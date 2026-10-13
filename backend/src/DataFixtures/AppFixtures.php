@@ -107,10 +107,16 @@ class AppFixtures extends Fixture
                 $manager->persist($todo);
             }
 
-            // 3. Notes (actives, épinglées et dans la corbeille)
+            // 3. Notes (70 % open, 20 % archived, 10 % trash via core-php)
             $noteCount = $faker->numberBetween(10, 20);
             for ($k = 0; $k < $noteCount; $k++) {
                 $noteCreatedAt = \DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-2 months', 'now'));
+
+                /** @var StateEnum $state */
+                $state = random_choices(
+                    [StateEnum::Open, StateEnum::Archieved, StateEnum::Trash],
+                    [70, 20, 10]
+                );
 
                 // 20 % de chance d'être dans la corbeille (deleted_at non nul)
                 $deletedAt = $faker->boolean(20)
@@ -121,11 +127,14 @@ class AppFixtures extends Fixture
                 $note
                     ->setTitle($faker->sentence($faker->numberBetween(2, 5)))
                     ->setContent($faker->paragraphs($faker->numberBetween(1, 4), true))
-                    ->setState(!empty($states) ? $faker->randomElement($states) : StateEnum::Open)
+                    ->setState($state)
                     ->setColor(!empty($availableColors) ? $faker->optional(0.7)->randomElement(ColorEnum::cases()) : null)
                     ->setIsPinned($deletedAt === null && $faker->boolean(20))
-                    ->setDeletedAt($deletedAt)
-                    ->setCreatedAt($noteCreatedAt);
+                    ->setCreatedAt($noteCreatedAt)
+                    ->setIsPinned(random_choices([true, false], [0.12, 0.88]))
+                ;
+
+                if ($note->getState() === StateEnum::Trash) $note->setDeletedAt($deletedAt);
 
                 if ($faker->boolean(60) && !empty($userTags)) {
                     $note->setTag($faker->randomElement($userTags));

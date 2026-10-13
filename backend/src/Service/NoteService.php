@@ -18,6 +18,7 @@ use Fagathe\CorePhp\Trait\LoggerTrait;
 use Fagathe\CorePhp\Trait\PaginationTrait;
 use Fagathe\CorePhp\Uploader\FileUploadException;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,29 +48,40 @@ final class NoteService
     }
 
     /**
-     * Liste des notes actives de l'utilisateur (files: [[], []])
+     * Liste des notes selon le filtre ('open', 'archived', 'trash')
      */
-    public function listNotes(): object
+    public function listNotes(Request $request): object
     {
         $user = $this->getAuthenticatedUser();
         if (!$user) {
             return $this->sendJson(['message' => 'Utilisateur non authentifié.'], Response::HTTP_UNAUTHORIZED);
         }
 
-        $notes = $this->repository->createQueryBuilder('n')
-            ->andWhere('n.owner = :user')
-            ->andWhere('n.deleted_at IS NULL')
-            ->setParameter('user', $user)
-            ->orderBy('n.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $filter = $request->query->get('filter', 'open');
 
-        return $this->sendJson($notes, Response::HTTP_OK, context: ['groups' => ['note.list']]);
+        $qb = $this->repository->createQueryBuilder('n')
+            ->andWhere('n.owner = :ownerId')
+            ->setParameter('ownerId', $user->getId(), UuidType::NAME)
+            ->orderBy('n.created_at', 'DESC');
+
+        if ($filter === 'trash') {
+            $qb->andWhere('n.deleted_at IS NOT NULL AND n.state = :trashState')
+                ->setParameter('trashState', StateEnum::Trash->value);
+        } elseif ($filter === 'archived') {
+            $qb->andWhere('n.deleted_at IS NULL')
+                ->andWhere('n.state = :archivedState')
+                ->setParameter('archivedState', StateEnum::Archieved->value);
+        } else {
+            $qb->andWhere('n.deleted_at IS NULL')
+                ->andWhere('n.state = :openState')
+                ->setParameter('openState', StateEnum::Open->value);
+        }
+
+        $notes = $qb->getQuery()->getResult();
+
+        return $this->sendJson($notes, Response::HTTP_OK, context: ['groups' => ['note.list',]]);
     }
 
-    /**
-     * Création d'une note avec validation DTO
-     */
     public function createNote(Request $request): object
     {
         $user = $this->getAuthenticatedUser();
@@ -109,25 +121,18 @@ final class NoteService
         try {
             $this->repository->save($note, flush: true, isCreation: true);
 
-            return $this->sendJson($note, Response::HTTP_CREATED, context: ['groups' => ['note.read']]);
+            return $this->sendJson($note, Response::HTTP_CREATED, context: ['groups' => ['note.read', 'tag.read']]);
         } catch (Throwable $e) {
             $this->generateLog(
                 LoggerLevelEnum::Critical,
-                [
-                    'message' => 'Erreur critique lors de la création de la note',
-                    'user'    => $user->getUserIdentifier(),
-                    'error'   => $e->getMessage(),
-                ],
+                ['message' => 'Erreur création note', 'user' => $user->getUserIdentifier(), 'error' => $e->getMessage()],
                 ['action' => 'note.create.critical_error']
             );
 
-            return $this->sendJson(['message' => 'Erreur interne lors de la création de la note.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendJson(['message' => 'Erreur interne lors de la création.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
-    /**
-     * Modification d'une note (supporte multipart/form-data pour upload de fichiers)
-     */
     public function updateNote(Note $note, Request $request): object
     {
         $user = $this->getAuthenticatedUser();
@@ -171,7 +176,10 @@ final class NoteService
             }
         }
 
-        // Upload des pièces jointes envoyées en FormData
+        if (array_key_exists('isPinned', $data)) {
+            $note->setIsPinned(filter_var($data['isPinned'], FILTER_VALIDATE_BOOLEAN));
+        }
+
         $files = $this->extractUploadedFiles($request);
         try {
             foreach ($files as $file) {
@@ -184,25 +192,41 @@ final class NoteService
         try {
             $this->repository->save($note, flush: true, isCreation: false);
 
-            return $this->sendJson($note, Response::HTTP_OK, context: ['groups' => ['note.read', 'file.read']]);
+            return $this->sendJson($note, Response::HTTP_OK, context: ['groups' => ['note.read', 'tag.read', 'file.read']]);
         } catch (Throwable $e) {
             $this->generateLog(
                 LoggerLevelEnum::Critical,
-                [
-                    'message' => 'Erreur critique lors de la mise à jour de la note',
-                    'note_id' => (string) $note->getId(),
-                    'error'   => $e->getMessage(),
-                ],
+                ['message' => 'Erreur mise à jour note', 'note_id' => (string) $note->getId(), 'error' => $e->getMessage()],
                 ['action' => 'note.update.critical_error']
             );
 
-            return $this->sendJson(['message' => 'Erreur interne lors de la mise à jour de la note.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendJson(['message' => 'Erreur interne lors de la mise à jour.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Mise à la corbeille (soft delete) ou suppression définitive
+     * Restaure une note depuis la corbeille ou les archives vers l'état actif
      */
+    public function restoreNote(Note $note): object
+    {
+        $note->setDeletedAt(null);
+        $note->setState(StateEnum::Open);
+
+        try {
+            $this->repository->save($note, flush: true, isCreation: false);
+
+            return $this->sendJson($note, Response::HTTP_OK, context: ['groups' => ['note.read', 'tag.read']]);
+        } catch (Throwable $e) {
+            $this->generateLog(
+                LoggerLevelEnum::Critical,
+                ['message' => 'Erreur restauration note', 'note_id' => (string) $note->getId(), 'error' => $e->getMessage()],
+                ['action' => 'note.restore.critical_error']
+            );
+
+            return $this->sendJson(['message' => 'Erreur interne lors de la restauration.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public function deleteNote(Note $note, bool $permanent = false): object
     {
         try {
@@ -211,6 +235,7 @@ final class NoteService
                 $this->repository->remove($note, true);
             } else {
                 $note->setDeletedAt($this->now());
+                $note->setState(StateEnum::Trash);
                 $this->repository->save($note, flush: true, isCreation: false);
             }
 
@@ -218,21 +243,14 @@ final class NoteService
         } catch (Throwable $e) {
             $this->generateLog(
                 LoggerLevelEnum::Critical,
-                [
-                    'message' => 'Erreur lors de la suppression de la note',
-                    'note_id' => (string) $note->getId(),
-                    'error'   => $e->getMessage(),
-                ],
+                ['message' => 'Erreur suppression note', 'note_id' => (string) $note->getId(), 'error' => $e->getMessage()],
                 ['action' => 'note.delete.critical_error']
             );
 
-            return $this->sendJson(['message' => 'Erreur interne lors de la suppression de la note.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->sendJson(['message' => 'Erreur interne lors de la suppression.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
-    /**
-     * Supprime un fichier attaché à la note
-     */
     public function deleteNoteFile(Note $note, string $fileId): object
     {
         $file = $note->getFiles()->findFirst(
@@ -260,19 +278,13 @@ final class NoteService
         );
 
         if (!$tag) {
-            return $this->sendJson(
-                ['message' => 'Ce tag n\'existe pas ou ne vous appartient pas.'],
-                Response::HTTP_UNPROCESSABLE_ENTITY
-            );
+            return $this->sendJson(['message' => 'Tag invalide ou non autorisé.'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $note->setTag($tag);
         return null;
     }
 
-    /**
-     * @return array<UploadedFile>
-     */
     private function extractUploadedFiles(Request $request): array
     {
         $extracted = [];
@@ -287,14 +299,53 @@ final class NoteService
                 $extracted[] = $item;
             }
         }
-
         return $extracted;
     }
 
     private function getAuthenticatedUser(): ?User
     {
         $user = $this->security->getUser();
-
         return $user instanceof User ? $user : null;
+    }
+
+    /**
+     * Supprime définitivement toutes les notes de l'utilisateur dans la corbeille ainsi que leurs fichiers.
+     */
+    public function emptyTrash(): object
+    {
+        $user = $this->getAuthenticatedUser();
+        if (!$user) {
+            return $this->sendJson(['message' => 'Utilisateur non authentifié.'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $notes = $this->repository->createQueryBuilder('n')
+            ->andWhere('n.owner = :ownerId')
+            ->andWhere('(n.deleted_at IS NOT NULL OR n.state = :trashState)')
+            ->setParameter('ownerId', $user->getId(), UuidType::NAME)
+            ->setParameter('trashState', StateEnum::Trash)
+            ->getQuery()
+            ->getResult();
+
+        try {
+            foreach ($notes as $note) {
+                // Suppression physique des fichiers sur le disque puis de l'entité
+                $this->fileService->deleteByTarget($note);
+                $this->repository->remove($note, true);
+            }
+
+            return $this->sendNoContent();
+        } catch (Throwable $e) {
+            $this->generateLog(
+                LoggerLevelEnum::Critical,
+                [
+                    'message' => 'Erreur critique lors du vidage de la corbeille',
+                    'user_id' => (string) $user->getId(),
+                    'error'   => $e->getMessage(),
+                ],
+                ['action' => 'note.empty_trash.critical_error']
+            );
+
+            return $this->sendJson(['message' => 'Erreur interne lors du vidage de la corbeille.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

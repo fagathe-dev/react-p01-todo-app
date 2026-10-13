@@ -17,4 +17,6 @@ final class UpdateNoteDto
     public ?string $state = null;
 
     public ?string $tag = null;
+
+    public ?bool $isPinned = null;
 }

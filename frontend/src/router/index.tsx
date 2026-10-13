@@ -6,8 +6,6 @@ import {
   JournalEditPage,
   JournalsPage,
   LoginPage,
-  NoteCreatePage,
-  NoteEditPage,
   NotesArchivePage,
   NotesPage,
   NotesTrashPage,
@@ -49,11 +47,7 @@ export const router = createBrowserRouter([
           // Module Notes
           {
             path: '/notes',
-            children: [
-              { index: true, element: <NotesPage /> },
-              { path: 'new', element: <NoteCreatePage /> },
-              { path: ':id', element: <NoteEditPage /> },
-            ],
+            element: <NotesPage />,
           },
           {
             path: '/archives',

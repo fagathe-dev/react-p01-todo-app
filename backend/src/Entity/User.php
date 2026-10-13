@@ -24,7 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
-    #[Groups(['user.read'])]
+    #[Groups(['user.read', 'note.list'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 180)]

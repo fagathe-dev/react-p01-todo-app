@@ -10,7 +10,7 @@ const ToggleButton = styled.button<{ $breakpoint?: string }>`
   justify-content: center;
   padding: ${({ theme }) => theme.spacing[2]};
   background: transparent;
-  border: 1px solid ${({ theme }) => theme.colors.border.default};
+  border: 1px solid transparent;
   border-radius: ${({ theme }) => theme.radii.base};
   color: ${({ theme }) => theme.colors.text.body};
   cursor: pointer;
@@ -45,7 +45,7 @@ export const SidebarToggle: React.FC<ClickableComponentProps> = ({
       aria-label="Basculer la barre latérale"
       {...props}
     >
-      {children ?? <Icon name={isOpen ? 'close' : 'menu'} size={20} />}
+      {children ?? <Icon name={isOpen ? 'close' : 'menu'} size={25} />}
     </ToggleButton>
   );
 };
