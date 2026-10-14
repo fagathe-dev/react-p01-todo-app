@@ -13,6 +13,7 @@ use App\Enum\MoodEnum;
 use App\Enum\StateEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Fagathe\CorePhp\Generator\TokenGenerator;
 use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -20,7 +21,8 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 class AppFixtures extends Fixture
 {
     public function __construct(
-        private readonly UserPasswordHasherInterface $hasher
+        private readonly UserPasswordHasherInterface $hasher,
+        private readonly TokenGenerator $tokenGenerator
     ) {}
 
     public function load(ObjectManager $manager): void
@@ -59,7 +61,8 @@ class AppFixtures extends Fixture
                 ->setPassword($this->hasher->hashPassword($user, $defaultPassword))
                 ->setJournalPasscode($defaultPasscode)
                 ->setIsVerified(true)
-                ->setEmailVerifiedAt(new \DateTimeImmutable());
+                ->setEmailVerifiedAt(new \DateTimeImmutable())
+                ->setJCodeToken($this->tokenGenerator->generate(80));
 
             // 1. Tags propres à l'utilisateur (respect de la contrainte unique owner + color)
             $availableColors = ColorEnum::cases();

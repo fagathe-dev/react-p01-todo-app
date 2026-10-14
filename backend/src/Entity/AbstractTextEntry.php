@@ -13,23 +13,23 @@ abstract class AbstractTextEntry
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
-    #[Groups(['user.read', 'note.list', 'note.read'])]
+    #[Groups(['user.read', 'note.list', 'note.read', 'entry.list', 'entry.read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['entry.read', 'note.list', 'note.read'])]
+    #[Groups(['entry.list', 'entry.read', 'note.list', 'note.read'])]
     protected ?string $content = null;
 
     #[ORM\Column]
-    #[Groups(['entry.read', 'note.list', 'note.read'])]
+    #[Groups(['entry.list', 'entry.read', 'note.list', 'note.read'])]
     protected ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['entry.read', 'note.list', 'note.read'])]
+    #[Groups(['entry.list', 'entry.read', 'note.list', 'note.read'])]
     protected ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['entry.read', 'note.list', 'note.read'])]
+    #[Groups(['entry.list', 'entry.read', 'note.list', 'note.read'])]
     protected ?bool $is_pinned = null;
 
     public function __construct()

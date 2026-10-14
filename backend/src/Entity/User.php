@@ -137,6 +137,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $journalPasscode = null;
 
+    #[ORM\Column(length: 90, nullable: true)]
+    private ?string $jCodeToken = null;
+
     public function __construct()
     {
         $this->id = Uuid::v7();
@@ -579,5 +582,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function hasJournalPasscode(): bool
     {
         return $this->journalPasscode !== null;
+    }
+
+    public function getJCodeToken(): ?string
+    {
+        return $this->jCodeToken;
+    }
+
+    public function setJCodeToken(?string $jCodeToken): static
+    {
+        $this->jCodeToken = $jCodeToken;
+
+        return $this;
     }
 }

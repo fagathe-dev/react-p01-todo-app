@@ -5,10 +5,7 @@ import { Icon } from '@/ui/components/Base/Icon';
 import { Loading } from '@/ui/components/Feedback/Loading';
 import { Text } from '@/ui/components/Typo/Text';
 import { Title } from '@/ui/components/Typo/Title';
-import {
-  DueDateCategory,
-  isoToDueDateCategory,
-} from '@/utils/dueDate.resolver';
+import { DueDateCategory, isoToDueDateCategory } from '@/utils/dueDate.resolver';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { TodoEditForm, TodoList, TodoQuickCreateForm } from './components';
@@ -16,7 +13,10 @@ import { TodoEditForm, TodoList, TodoQuickCreateForm } from './components';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  margin-inline: auto;
   min-height: calc(100vh - 120px);
+  width: 100%;
+  max-width: 924px;
   gap: ${({ theme }) => theme.spacing[4]};
 `;
 
@@ -31,11 +31,7 @@ const BottomBar = styled.div`
   bottom: ${({ theme }) => theme.spacing[4]};
   margin-top: auto;
   padding-top: ${({ theme }) => theme.spacing[2]};
-  background: linear-gradient(
-    to top,
-    ${({ theme }) => theme.colors.background.body} 75%,
-    transparent
-  );
+  background: linear-gradient(to top, ${({ theme }) => theme.colors.background.body} 75%, transparent);
 `;
 
 // Ordre requis : En retard -> Échéances proches -> Sans échéance (juste avant terminées)
@@ -145,11 +141,7 @@ export const TodoPage: React.FC = () => {
                 {label} ({list.length})
               </Text>
             </div>
-            <TodoList
-              todos={list}
-              onTodoUpdated={handleUpdate}
-              onSelectTodo={setSelectedTodo}
-            />
+            <TodoList todos={list} onTodoUpdated={handleUpdate} onSelectTodo={setSelectedTodo} />
           </div>
         );
       })}
@@ -157,19 +149,10 @@ export const TodoPage: React.FC = () => {
       {/* Tâches terminées tout en bas */}
       {doneList.length > 0 && (
         <div>
-          <Text
-            size="xs"
-            weight="semibold"
-            color="muted"
-            style={{ margin: '14px 0 8px' }}
-          >
+          <Text size="xs" weight="semibold" color="muted" style={{ margin: '14px 0 8px' }}>
             Terminées ({doneList.length})
           </Text>
-          <TodoList
-            todos={doneList}
-            onTodoUpdated={handleUpdate}
-            onSelectTodo={setSelectedTodo}
-          />
+          <TodoList todos={doneList} onTodoUpdated={handleUpdate} onSelectTodo={setSelectedTodo} />
         </div>
       )}
 
@@ -184,9 +167,7 @@ export const TodoPage: React.FC = () => {
       )}
 
       <BottomBar>
-        <TodoQuickCreateForm
-          onCreated={(t) => setTodos((prev) => [t, ...prev])}
-        />
+        <TodoQuickCreateForm onCreated={(t) => setTodos((prev) => [t, ...prev])} />
       </BottomBar>
     </Container>
   );

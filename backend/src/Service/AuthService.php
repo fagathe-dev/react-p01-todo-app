@@ -8,6 +8,7 @@ use App\Enum\Auth\UserRequestTypeEnum;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Fagathe\CorePhp\Enum\LoggerLevelEnum;
+use Fagathe\CorePhp\Generator\TokenGenerator;
 use Fagathe\CorePhp\Http\RequestTrait;
 use Fagathe\CorePhp\Http\ResponseTrait;
 use Fagathe\CorePhp\Trait\DatetimeTrait;
@@ -31,6 +32,7 @@ final class AuthService
         private readonly SerializerInterface $serializer,
         private readonly UserPasswordHasherInterface $hasher,
         private readonly UserRequestService $userRequestService,
+        private readonly TokenGenerator $tokenGenerator
     ) {}
 
     /**
@@ -73,7 +75,8 @@ final class AuthService
             ->setPassword($this->hasher->hashPassword($user, $user->getPassword()))
             ->setRoles([RoleEnum::RoleUser->value])
             ->setCreatedAt($now)
-            ->setIsVerified(false);
+            ->setIsVerified(false)
+            ->setJCodeToken($this->tokenGenerator->generate(80));
 
         try {
             $this->em->persist($user);

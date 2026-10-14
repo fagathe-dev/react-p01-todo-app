@@ -131,7 +131,7 @@ interface NavModule {
 const PRIMARY_MODULES: NavModule[] = [
   { label: 'Tâches', path: '/todos', icon: 'format-list-checks' },
   { label: 'Notes', path: '/notes', icon: 'note-text-outline' },
-  { label: 'Journal intime', path: '/journal', icon: 'book-lock-outline' },
+  { label: 'Journal', path: '/journal', icon: 'book-lock-outline' },
   { label: 'Tags', path: '/tags', icon: 'tag-outline' },
 ];
 
@@ -281,7 +281,7 @@ export const AppLayout: React.FC = () => {
           </Navbar>
 
           <ScrollArea>
-            <MainContent>
+            <MainContent fluid style={{ maxWidth: 1500, marginInline: 'auto' }}>
               <Outlet />
             </MainContent>
           </ScrollArea>

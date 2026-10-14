@@ -1,4 +1,4 @@
-// src/pages/notes/components/NoteCard.tsx
+import { useClipboard } from '@/hooks/useClipboard';
 import { Note } from '@/types/note.types';
 import { Icon } from '@/ui/components/Base/Icon';
 import { Text } from '@/ui/components/Typo/Text';
@@ -33,9 +33,19 @@ export const NoteCard: React.FC<NoteCardProps> = ({
   onDelete,
   onPermanentDelete,
 }) => {
+  const { copy, hasCopied } = useClipboard({ feedbackDuration: 2000 });
+
+  // Seul l'aperçu visuel est tronqué
   const htmlContent = useMemo(() => {
     return note.content ? convertMarkdownToHtml(truncateWords(note.content, 100)) : '';
   }, [note.content]);
+
+  // Copie de l'intégralité du contenu brut de la note
+  const handleCopy = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!note.content) return;
+    await copy(note.content);
+  };
 
   return (
     <S.Card $color={note.color} onClick={() => onSelect(note)}>
@@ -70,7 +80,27 @@ export const NoteCard: React.FC<NoteCardProps> = ({
 
       <S.Footer onClick={(e) => e.stopPropagation()}>
         {note.tag ? <S.TagBadge $color={note.tag.color}>{note.tag.name}</S.TagBadge> : <span />}
-        <div style={{ display: 'flex', gap: 4 }}>
+
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          {/* Bouton de copie du contenu complet (exclu dans la corbeille) */}
+          {variant !== 'trash' && note.content && (
+            <button
+              type="button"
+              onClick={handleCopy}
+              style={{
+                border: 'none',
+                background: 'none',
+                cursor: 'pointer',
+                color: hasCopied ? '#16a34a' : 'inherit',
+                transition: 'color 0.15s ease',
+                padding: 0,
+              }}
+              title={hasCopied ? 'Copié !' : 'Copier l’intégralité de la note'}
+            >
+              <Icon name={hasCopied ? 'check' : 'content-copy'} size={15} />
+            </button>
+          )}
+
           {variant === 'open' && (
             <>
               {onArchive && (
@@ -78,6 +108,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({
                   type="button"
                   onClick={() => onArchive(note.id)}
                   style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                  title="Archiver"
                 >
                   <Icon name="archive-arrow-down-outline" size={15} />
                 </button>
@@ -87,21 +118,25 @@ export const NoteCard: React.FC<NoteCardProps> = ({
                   type="button"
                   onClick={() => onDelete(note.id)}
                   style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                  title="Supprimer"
                 >
                   <Icon name="trash-can-outline" size={15} />
                 </button>
               )}
             </>
           )}
+
           {variant === 'archived' && onRestore && (
             <button
               type="button"
               onClick={() => onRestore(note.id)}
               style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+              title="Restaurer"
             >
               <Icon name="backup-restore" size={15} />
             </button>
           )}
+
           {variant === 'trash' && (
             <>
               {onRestore && (
@@ -109,6 +144,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({
                   type="button"
                   onClick={() => onRestore(note.id)}
                   style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                  title="Restaurer"
                 >
                   <Icon name="backup-restore" size={15} />
                 </button>
@@ -118,6 +154,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({
                   type="button"
                   onClick={() => onPermanentDelete(note.id)}
                   style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#e7000b' }}
+                  title="Supprimer définitivement"
                 >
                   <Icon name="delete-forever-outline" size={16} />
                 </button>

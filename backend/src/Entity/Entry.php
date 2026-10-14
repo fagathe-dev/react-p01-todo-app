@@ -43,12 +43,17 @@ class Entry extends AbstractTextEntry
      * @var Collection<int, EntryMedia>
      */
     #[ORM\OneToMany(targetEntity: EntryMedia::class, mappedBy: 'entry', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[Groups(['entry.read'])]
+    #[Groups(['entry.read', 'entry.list'])]
     private Collection $entryMedia;
 
     #[ORM\ManyToOne(inversedBy: 'entries')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $owner = null;
+
+    #[ORM\ManyToOne(targetEntity: Location::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    #[Groups(['entry.list', 'entry.read'])]
+    private ?Location $location = null;
 
     public function __construct()
     {
@@ -162,5 +167,17 @@ class Entry extends AbstractTextEntry
                 ->atPath('content')
                 ->addViolation();
         }
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): static
+    {
+        $this->location = $location;
+
+        return $this;
     }
 }

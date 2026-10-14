@@ -15,28 +15,31 @@ class Location
 
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
+    #[Groups(['entry.list', 'entry.read'])]
     protected ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['entry.read'])]
+    #[Groups(['entry.list', 'entry.read'])]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Groups(['entry.list', 'entry.read'])]
     private ?float $latitude = null;
 
     #[ORM\Column]
+    #[Groups(['entry.list', 'entry.read'])]
     private ?float $longitude = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['entry.read'])]
+    #[Groups(['entry.list', 'entry.read'])]
     private ?string $street = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['entry.read'])]
+    #[Groups(['entry.list', 'entry.read'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['entry.read'])]
+    #[Groups(['entry.list', 'entry.read'])]
     private ?string $country = null;
 
     #[ORM\ManyToOne(inversedBy: 'locations')]
@@ -56,7 +59,7 @@ class Location
         $this->id = Uuid::v7();
     }
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
