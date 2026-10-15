@@ -3,6 +3,7 @@ import { Entry, EntryLocation, EntryMedia, MOOD_META, MoodEnum, UpdateEntryPaylo
 import { ColorEnum, Tag } from '@/types/tag.types';
 import { Button } from '@/ui/components/Base/Button';
 import { Icon } from '@/ui/components/Base/Icon';
+import { TabContent, TabList, Tabs, TabTrigger } from '@/ui/components/Navigation';
 import { convertMarkdownToHtml } from 'core-ts';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { JournalColorPicker } from './JournalColorPicker';
@@ -42,7 +43,6 @@ export const JournalForm: React.FC<JournalFormProps> = ({
   const [mediaErrors, setMediaErrors] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [mode, setMode] = useState<'write' | 'preview'>('write');
   const [showMoodModal, setShowMoodModal] = useState(false);
   const [activePicker, setActivePicker] = useState<'palette' | 'tag' | null>(null);
   const [tags, setTags] = useState<Tag[]>([]);
@@ -112,29 +112,29 @@ export const JournalForm: React.FC<JournalFormProps> = ({
         </button>
       </S.TopBar>
 
-      <S.TabHeader>
-        <S.TabBtn type="button" $active={mode === 'write'} onClick={() => setMode('write')}>
-          Écrire
-        </S.TabBtn>
-        <S.TabBtn type="button" $active={mode === 'preview'} onClick={() => setMode('preview')}>
-          Aperçu
-        </S.TabBtn>
-      </S.TabHeader>
+      <Tabs defaultValue="write">
+        <TabList style={{ padding: '0 20px' }}>
+          <TabTrigger value="write">Écrire</TabTrigger>
+          <TabTrigger value="preview">Aperçu</TabTrigger>
+        </TabList>
 
-      {mode === 'write' ? (
-        <S.TextArea
-          placeholder="Rédige tes pensées en Markdown…"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          onPaste={handlePaste}
-        />
-      ) : (
-        <S.Preview
-          dangerouslySetInnerHTML={{
-            __html: previewHtml || '<p style="color:#888">Rien à prévisualiser…</p>',
-          }}
-        />
-      )}
+        <TabContent value="write" style={{ paddingTop: 0 }}>
+          <S.TextArea
+            placeholder="Rédige tes pensées en Markdown…"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            onPaste={handlePaste}
+          />
+        </TabContent>
+
+        <TabContent value="preview" style={{ paddingTop: 0 }}>
+          <S.Preview
+            dangerouslySetInnerHTML={{
+              __html: previewHtml || '<p style="color:#888">Rien à prévisualiser…</p>',
+            }}
+          />
+        </TabContent>
+      </Tabs>
 
       {isEdit && (
         <>

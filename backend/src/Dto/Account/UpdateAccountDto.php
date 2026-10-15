@@ -10,14 +10,14 @@ final class UpdateAccountDto
     #[Assert\Length(
         min: 3,
         max: 90,
-        minMessage: 'Le nom d\'utilisateur doit comporter au moins 3 caractères.',
-        maxMessage: 'Le nom d\'utilisateur ne peut pas dépasser 90 caractères.'
+        minMessage: 'Le nom d\'utilisateur doit contenir au moins {{ limit }} caractères.',
+        maxMessage: 'Le nom d\'utilisateur ne peut pas dépasser {{ limit }} caractères.'
     )]
-    public ?string $username = null;
+    public string $username = '';
 
-    #[Assert\Length(max: 80, maxMessage: 'Le prénom ne peut pas dépasser 80 caractères.')]
+    #[Assert\Length(max: 80, maxMessage: 'Le prénom ne peut pas dépasser {{ limit }} caractères.')]
     public ?string $firstname = null;
 
-    #[Assert\Length(max: 80, maxMessage: 'Le nom de famille ne peut pas dépasser 80 caractères.')]
+    #[Assert\Length(max: 80, maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères.')]
     public ?string $lastname = null;
 }

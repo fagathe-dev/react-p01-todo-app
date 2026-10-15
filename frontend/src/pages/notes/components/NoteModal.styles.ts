@@ -46,32 +46,6 @@ const TitleInput = styled.input`
   color: ${({ theme }) => theme.colors.text.heading};
 `;
 
-const TabRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  margin-top: 4px;
-`;
-
-const TabBtn = styled.button<{ $active: boolean }>`
-  background: none;
-  border: none;
-  border-bottom: 2px solid ${({ $active, theme }) => ($active ? theme.colors.primary.base : 'transparent')};
-  padding: 4px 6px;
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: ${({ $active }) => ($active ? 600 : 500)};
-  color: ${({ $active, theme }) => ($active ? theme.colors.text.heading : theme.colors.text.muted)};
-  cursor: pointer;
-  transition: all 0.1s ease;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.text.heading};
-  }
-`;
-
 const ContentArea = styled.textarea`
   width: 100%;
   min-height: 80vh;
@@ -152,4 +126,4 @@ const Toolbar = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.05);
 `;
 
-export { Backdrop, Box, ContentArea, PreviewArea, TabBtn, TabRow, TitleInput, Toolbar, TopRow };
+export { Backdrop, Box, ContentArea, PreviewArea, TitleInput, Toolbar, TopRow };

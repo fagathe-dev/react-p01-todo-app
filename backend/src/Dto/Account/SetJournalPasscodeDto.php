@@ -6,6 +6,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class SetJournalPasscodeDto
 {
+    public ?string $currentPasscode = null;
+
     #[Assert\NotBlank(message: 'Le code secret est obligatoire.')]
     #[Assert\Length(
         min: 4,

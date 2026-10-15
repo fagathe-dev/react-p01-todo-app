@@ -7,6 +7,8 @@ const TabsRoot = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
 `;
 
 export interface TabsProps extends BaseComponentProps {
@@ -15,13 +17,7 @@ export interface TabsProps extends BaseComponentProps {
   onValueChange?: (value: string) => void;
 }
 
-export const Tabs = ({
-  defaultValue = '',
-  value,
-  onValueChange,
-  children,
-  ...rest
-}: TabsProps) => {
+export const Tabs = ({ defaultValue = '', value, onValueChange, children, ...rest }: TabsProps) => {
   const [internalValue, setInternalValue] = useState<string>(defaultValue);
 
   const activeTab = value !== undefined ? value : internalValue;

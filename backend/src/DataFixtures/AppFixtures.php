@@ -46,6 +46,7 @@ class AppFixtures extends Fixture
                     ->setUsername('testuser')
                     ->setFirstname('Test')
                     ->setLastname('User')
+                    ->setJournalPasscode($defaultPasscode)
                     ->setCreatedAt(new \DateTimeImmutable());
             } else {
                 $user

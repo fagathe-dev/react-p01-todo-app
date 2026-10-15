@@ -1,7 +1,7 @@
 import { ColorEnum } from '@/types/tag.types';
 import styled from 'styled-components';
 
-export const FormRoot = styled.form<{ $color?: ColorEnum | null }>`
+const FormRoot = styled.form<{ $color?: ColorEnum | null }>`
   display: flex;
   flex-direction: column;
   background-color: inherit;
@@ -12,14 +12,14 @@ export const FormRoot = styled.form<{ $color?: ColorEnum | null }>`
     border-color 0.2s ease;
 `;
 
-export const TopBar = styled.div`
+const TopBar = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px 8px;
 `;
 
-export const TitleField = styled.input`
+const TitleField = styled.input`
   flex: 1;
   border: none;
   outline: none;
@@ -33,25 +33,7 @@ export const TitleField = styled.input`
   }
 `;
 
-export const TabHeader = styled.div`
-  display: flex;
-  gap: 12px;
-  padding: 0 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-`;
-
-export const TabBtn = styled.button<{ $active: boolean }>`
-  border: none;
-  background: none;
-  border-bottom: 2px solid ${({ $active, theme }) => ($active ? theme.colors.primary.base : 'transparent')};
-  padding: 8px 4px;
-  font-size: 13px;
-  font-weight: ${({ $active }) => ($active ? 600 : 400)};
-  color: ${({ $active, theme }) => ($active ? theme.colors.text.heading : theme.colors.text.muted)};
-  cursor: pointer;
-`;
-
-export const TextArea = styled.textarea`
+const TextArea = styled.textarea`
   width: 100%;
   min-height: 280px;
   border: none;
@@ -65,7 +47,7 @@ export const TextArea = styled.textarea`
   box-sizing: border-box;
 `;
 
-export const Preview = styled.div`
+const Preview = styled.div`
   min-height: 280px;
   padding: 16px 20px;
   font-size: 14px;
@@ -73,7 +55,7 @@ export const Preview = styled.div`
   box-sizing: border-box;
 `;
 
-export const Toolbar = styled.div`
+const Toolbar = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -83,14 +65,14 @@ export const Toolbar = styled.div`
   border-top: 1px solid ${({ theme }) => theme.colors.border.default};
 `;
 
-export const ToolGroup = styled.div`
+const ToolGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
 `;
 
-export const ToolSquareBtn = styled.button<{ $active?: boolean }>`
+const ToolSquareBtn = styled.button<{ $active?: boolean }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -110,3 +92,5 @@ export const ToolSquareBtn = styled.button<{ $active?: boolean }>`
     background-color: rgba(0, 0, 0, 0.08);
   }
 `;
+
+export { FormRoot, Preview, TextArea, TitleField, Toolbar, ToolGroup, ToolSquareBtn, TopBar };

@@ -15,8 +15,7 @@ export const useClipboard = (options: UseClipboardOptions = {}) => {
 
   const [hasCopied, setHasCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isSupported = isClipboardSupported();
 
   useEffect(() => {

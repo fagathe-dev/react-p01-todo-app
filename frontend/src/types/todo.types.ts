@@ -16,7 +16,7 @@ interface TodoFile {
   isPinned: boolean;
 }
 
-export interface TodoComment {
+interface TodoComment {
   id: string;
   content: string;
   createdAt?: string | null;
@@ -53,11 +53,4 @@ interface UpdateTodoPayload {
   tag?: string | null;
 }
 
-export type {
-  CreateTodoPayload,
-  DueDateEnum,
-  Todo,
-  TodoComment,
-  TodoFile,
-  UpdateTodoPayload,
-};
+export type { CreateTodoPayload, DueDateEnum, Todo, TodoComment, TodoFile, UpdateTodoPayload };

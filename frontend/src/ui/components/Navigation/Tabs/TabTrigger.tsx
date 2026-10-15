@@ -12,11 +12,8 @@ const TriggerButton = styled.button<{ $active: boolean }>`
   font-family: inherit;
   font-size: ${({ theme }) => theme.typography.sizes.sm};
   font-weight: ${({ $active, theme }) =>
-    $active
-      ? theme.typography.weights.semibold
-      : theme.typography.weights.medium};
-  color: ${({ $active, theme }) =>
-    $active ? theme.colors.primary.base : theme.colors.text.muted};
+    $active ? theme.typography.weights.semibold : theme.typography.weights.medium};
+  color: ${({ $active, theme }) => ($active ? theme.colors.primary.base : theme.colors.text.muted)};
   background: transparent;
   border: none;
   cursor: pointer;
@@ -48,12 +45,7 @@ export interface TabTriggerProps extends BaseComponentProps {
   disabled?: boolean;
 }
 
-export const TabTrigger = ({
-  value,
-  disabled = false,
-  children,
-  ...rest
-}: TabTriggerProps) => {
+export const TabTrigger = ({ value, disabled = false, children, ...rest }: TabTriggerProps) => {
   const { activeTab, setActiveTab } = useTabs();
   const isActive = activeTab === value;
 

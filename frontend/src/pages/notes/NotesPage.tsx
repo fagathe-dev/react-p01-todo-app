@@ -1,9 +1,4 @@
-import {
-  createNote,
-  deleteNote,
-  fetchNotes,
-  updateNote,
-} from '@/services/note.api';
+import { createNote, deleteNote, fetchNotes, updateNote } from '@/services/note.api';
 import { CreateNotePayload, Note } from '@/types/note.types';
 import { Button } from '@/ui/components/Base/Button';
 import { Loading } from '@/ui/components/Feedback/Loading';
@@ -60,24 +55,15 @@ export const NotesPage: React.FC = () => {
   // Quick Action : épingler sans formulaire
   const handleTogglePin = async (note: Note) => {
     const nextPinned = !note.is_pinned;
-    setNotes((prev) =>
-      prev.map((n) => (n.id === note.id ? { ...n, is_pinned: nextPinned } : n))
-    );
+    setNotes((prev) => prev.map((n) => (n.id === note.id ? { ...n, is_pinned: nextPinned } : n)));
     try {
       await updateNote(note.id, { is_pinned: nextPinned });
     } catch {
-      setNotes((prev) =>
-        prev.map((n) =>
-          n.id === note.id ? { ...n, is_pinned: note.is_pinned } : n
-        )
-      );
+      setNotes((prev) => prev.map((n) => (n.id === note.id ? { ...n, is_pinned: note.is_pinned } : n)));
     }
   };
 
-  const handleSaveModal = async (
-    payload: CreateNotePayload,
-    files?: FileList
-  ) => {
+  const handleSaveModal = async (payload: CreateNotePayload) => {
     if (editingNote) {
       const updated = await updateNote(editingNote.id, payload);
       setNotes((prev) => prev.map((n) => (n.id === updated.id ? updated : n)));
@@ -155,13 +141,7 @@ export const NotesPage: React.FC = () => {
         </>
       )}
 
-      {isModalOpen && (
-        <NoteModal
-          note={editingNote}
-          onClose={() => setIsModalOpen(false)}
-          onSubmit={handleSaveModal}
-        />
-      )}
+      {isModalOpen && <NoteModal note={editingNote} onClose={() => setIsModalOpen(false)} onSubmit={handleSaveModal} />}
     </Container>
   );
 };

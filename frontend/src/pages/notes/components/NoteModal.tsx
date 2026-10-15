@@ -1,12 +1,14 @@
+// src/pages/notes/components/NoteModal.tsx
 import { fetchTags } from '@/services/tag.api';
 import { CreateNotePayload, Note } from '@/types/note.types';
 import { ColorEnum, Tag } from '@/types/tag.types';
 import { Icon } from '@/ui/components/Base/Icon';
+import { TabContent, TabList, Tabs, TabTrigger } from '@/ui/components/Navigation/Tabs';
 import { convertMarkdownToHtml } from 'core-ts';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Backdrop, Box, ContentArea, PreviewArea, TitleInput, Toolbar, TopRow } from './NoteModal.styles';
 import { NoteModalColorPicker } from './NoteModalColorPicker';
 import { NoteModalTagPicker } from './NoteModalTagPicker';
-import { Backdrop, Box, ContentArea, PreviewArea, TabBtn, TabRow, TitleInput, Toolbar, TopRow } from './NoteModal.styles';
 
 export const NoteModal: React.FC<{
   note?: Note | null;
@@ -15,7 +17,6 @@ export const NoteModal: React.FC<{
 }> = ({ note, onClose, onSubmit }) => {
   const [title, setTitle] = useState(note?.title || '');
   const [content, setContent] = useState(note?.content || '');
-  const [mode, setMode] = useState<'write' | 'preview'>('write');
   const [color, setColor] = useState<ColorEnum | null>(note?.color || null);
   const [is_pinned, setIsPinned] = useState(Boolean(note?.is_pinned));
   const [tagId, setTagId] = useState<string | null>(note?.tag?.id || null);
@@ -81,31 +82,31 @@ export const NoteModal: React.FC<{
           </button>
         </TopRow>
 
-        <TabRow>
-          <TabBtn type="button" $active={mode === 'write'} onClick={() => setMode('write')}>
-            Édition
-          </TabBtn>
-          <TabBtn type="button" $active={mode === 'preview'} onClick={() => setMode('preview')}>
-            Aperçu
-          </TabBtn>
-        </TabRow>
+        <Tabs defaultValue="write">
+          <TabList style={{ padding: '0 16px' }}>
+            <TabTrigger value="write">Édition</TabTrigger>
+            <TabTrigger value="preview">Aperçu</TabTrigger>
+          </TabList>
 
-        {mode === 'write' ? (
-          <ContentArea
-            placeholder="Rédigez votre note en Markdown…"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            autoFocus
-          />
-        ) : (
-          <PreviewArea>
-            {previewHtml ? (
-              <div dangerouslySetInnerHTML={{ __html: previewHtml }} />
-            ) : (
-              <span style={{ color: '#888', fontStyle: 'italic', fontSize: 13 }}>Rien à prévisualiser…</span>
-            )}
-          </PreviewArea>
-        )}
+          <TabContent value="write" style={{ paddingTop: 0 }}>
+            <ContentArea
+              placeholder="Rédigez votre note en Markdown…"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              autoFocus
+            />
+          </TabContent>
+
+          <TabContent value="preview" style={{ paddingTop: 0 }}>
+            <PreviewArea>
+              {previewHtml ? (
+                <div dangerouslySetInnerHTML={{ __html: previewHtml }} />
+              ) : (
+                <span style={{ color: '#888', fontStyle: 'italic', fontSize: 13 }}>Rien à prévisualiser…</span>
+              )}
+            </PreviewArea>
+          </TabContent>
+        </Tabs>
 
         <Toolbar>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
@@ -129,13 +130,7 @@ export const NoteModal: React.FC<{
           <button
             type="button"
             onClick={handleSave}
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              fontWeight: 600,
-              fontSize: 13,
-            }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}
           >
             Fermer
           </button>

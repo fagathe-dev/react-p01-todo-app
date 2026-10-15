@@ -113,7 +113,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Location>
      */
     #[ORM\OneToMany(targetEntity: Location::class, mappedBy: 'owner', cascade: ['remove', 'persist'], orphanRemoval: true)]
-    #[Groups(['user.read'])]
     private Collection $locations;
 
     #[ORM\Column(nullable: true)]
